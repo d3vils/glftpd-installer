@@ -123,16 +123,30 @@ if [ "$pass" = "^^" ]; then
   unset pass
 fi
 
-SQLDB="$mysql -u $user -p"$pass" -h $host -N -e"
-SQL="$mysql -u $user -p"$pass" -h $host -D $database -N -e"
+if [ -z "$pass" ]
+then
+    SQLDB="$mysql -u $user -h $host -N -e"
+    SQL="$mysql -u $user -h $host -D $database -N -e"
+    echo ""
+    echo "The database will created using:"
+    echo "$mysql -u $user -h $host -N -e"
+    echo ""
+    echo "The tables will be created using:"
+    echo "$mysql -u $user -h $host -D $database -N -e"
+    echo ""
 
-echo ""
-echo "The database will created using:"
-echo "$mysql -u $user -p\"$pass\" -h $host -N -e"
-echo ""
-echo "The tables will be created using:"
-echo "$mysql -u $user -p\"$pass\" -h $host -D $database -N -e"
-echo ""
+else
+    SQLDB="$mysql -u $user -p"$pass" -h $host -N -e"
+    SQL="$mysql -u $user -p"$pass" -h $host -D $database -N -e"
+    echo ""
+    echo "The database will created using:"
+    echo "$mysql -u $user -p\"$pass\" -h $host -N -e"
+    echo ""
+    echo "The tables will be created using:"
+    echo "$mysql -u $user -p\"$pass\" -h $host -D $database -N -e"
+    echo ""
+fi
+
 until [ -n "$go" ]; do
   echo -n "Continue? [Y]es [N]o: "
   read go
@@ -155,13 +169,13 @@ unset go
 
 $SQLDB "CREATE DATABASE $database"
 
-$SQL "CREATE TABLE "$table" ( "active" tinyint(1) default NULL, "username" text NOT NULL, "stats" text NOT NULL, "added" text NOT NULL, "extratime" text, "startstats" text NOT NULL, "endtime" text NOT NULL, "tlimit" text NOT NULL ) TYPE=MyISAM"
+$SQL "CREATE TABLE "$table" ( "active" tinyint(1) default NULL, "username" text NOT NULL, "stats" text NOT NULL, "added" text NOT NULL, "extratime" text, "startstats" text NOT NULL, "endtime" text NOT NULL, "tlimit" text NOT NULL ) Engine=MyISAM"
 
-$SQL "CREATE TABLE "$extable" ( "username" text NOT NULL, "excluded" tinyint(1) NOT NULL default '0' ) TYPE=MyISAM"
+$SQL "CREATE TABLE "$extable" ( "username" text NOT NULL, "excluded" tinyint(1) NOT NULL default '0' ) Engine=MyISAM"
 
-$SQL "CREATE TABLE "$passtable" ( "username" text NOT NULL, "passed" tinyint(1) NOT NULL default '0' ) TYPE=MyISAM"
+$SQL "CREATE TABLE "$passtable" ( "username" text NOT NULL, "passed" tinyint(1) NOT NULL default '0' ) Engine=MyISAM"
 
-$SQL "CREATE TABLE "$ranktable" ( "username" text NOT NULL, "rank" text NOT NULL ) TYPE=MyISAM"
+$SQL "CREATE TABLE "$ranktable" ( "username" text NOT NULL, "rank" text NOT NULL ) Engine=MyISAM"
 
 echo "Finished. If you have no errors above, the mysql setup is complete."
 echo "Now setup tur-trial3.conf using the same values as you gave here for host/database/tables."

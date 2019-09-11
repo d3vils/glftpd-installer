@@ -52,13 +52,15 @@ BASH needs to be the default shell. To change from default DASH to BASH in Debia
 ## Screenshots
 
 ### Normal installation
-![Screenshot_1](https://user-images.githubusercontent.com/36924638/64487690-c0bd9a00-d23d-11e9-8981-b93d8017f519.png)
-![Screenshot_2 51](https://user-images.githubusercontent.com/36924638/64487248-44748800-d238-11e9-9450-4960e38b26b4.png)
-![Screenshot_2 52](https://user-images.githubusercontent.com/36924638/64487249-44748800-d238-11e9-9c49-fc0bfeaabd6c.png)
-![Screenshot_3](https://user-images.githubusercontent.com/36924638/64488267-5826eb00-d246-11e9-9891-2ac2c6ad3586.png)
+
+![Screenshot_1](https://user-images.githubusercontent.com/36924638/64728657-c9cb9700-d4db-11e9-9878-1c72595d7ccf.png)
+![Screenshot_2](https://user-images.githubusercontent.com/36924638/64728658-c9cb9700-d4db-11e9-9694-e389735e407e.png)
+![Screenshot_3](https://user-images.githubusercontent.com/36924638/64728659-ca642d80-d4db-11e9-9e1f-aeed185d02de.png)
+![Screenshot_4](https://user-images.githubusercontent.com/36924638/64728660-ca642d80-d4db-11e9-9736-32d804b527cf.png)
 
 ### Unattended installation
-![Screenshot_4](https://user-images.githubusercontent.com/36924638/64488304-a936df00-d246-11e9-877c-1206a11cd123.png)
+
+![Screenshot_5](https://user-images.githubusercontent.com/36924638/64728661-ca642d80-d4db-11e9-8c1f-6da2ce4b7f8c.png)
 
 ## How to do an Unattended installation
 

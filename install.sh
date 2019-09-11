@@ -1,5 +1,5 @@
 #!/bin/bash
-VER=8.5
+VER=9.0
 clear
 
 if [ ! -d ".tmp" ]
@@ -70,12 +70,15 @@ fi
 
 function start
 {
+        echo "--------[ Server configuration ]--------------------------------------"
+	echo
 	if [[ -f "$cache" && "`cat $cache | grep -w sitename | wc -l`" = 1 ]]
 	then
 		sitename=`cat $cache | grep -w sitename | cut -d "=" -f2 | tr -d "\""`
 	return
 	fi
 	
+	echo
 	while [[ -z $sitename ]]
 	do
 		echo -n "Please enter the name of the site : " ; read sitename
@@ -107,11 +110,6 @@ function port
 			echo port=\"$port\" >> $cache
 		fi
 	fi
-	
-	#cp packages/data/installgl.sh.org installgl.sh
-	#sed "s/changeme/$port/" packages/data/installgl.sh.org > packages/data/installgl.sh && chmod +x packages/data/installgl.sh
-	#chmod +x installgl.sh
-	#mv installgl.sh packages/data
 }
 
 function version
@@ -119,9 +117,9 @@ function version
 	if [[ -f "$cache" && "`cat $cache | grep -w version | wc -l`" = 1 ]]
 	then
 		version=`cat $cache | grep -w version | cut -d "=" -f2 | tr -d "\""`
-		echo "Chosen version of glFTPD : $version bit"
+		#echo "Chosen version of glFTPD : $version bit"
 	else
-		echo -n "Do you want to install 32 or 64 bit version of glFTPD ? [32] [64], default 64 : " ; read version
+		echo -n "Install 32 or 64 bit version of glFTPD ? [32] [64], default 64 : " ; read version
 	fi
 	case $version in
 		32)
@@ -164,8 +162,8 @@ function version
 	fi 
 	
 	cd packages
-	echo
-	echo -n "Extracting the Source files, please wait..."
+	#echo
+	#echo -n "Extracting the Source files, please wait...                     "
 	$UP $PK1
 	$UP $PK2
 	$UP $PK3
@@ -185,8 +183,11 @@ function device_name
 	if [[ -f "$cache" && "`cat $cache | grep -w device | wc -l`" = 1 ]]
 	then
 		device=`cat $cache | grep -w device | cut -d "=" -f2 | tr -d "\""`
+		echo "Sitename           = $sitename"
+		echo "Port               = $port"
+		echo "glFTPD version     = $version" 
+		echo "Device             = $device"
 	else
-		echo
 		echo "Please enter which device you will use for the $glroot/site folder"
 		echo "eg /dev/sda1"
 		echo "eg /dev/mapper/lvm-lvm"
@@ -219,6 +220,12 @@ function channel
 	then
 		mkdir .tmp
 	fi
+
+        if [[ -f "$cache" && "`cat $cache | grep -w ircserver | wc -l`" = 1 ]]
+        then
+                ircserver=`cat $cache | grep -w ircserver | cut -d "=" -f2 | tr -d "\""`
+                echo -n "Irc server         = $ircserver"
+        fi
 	
 	if [[ -f "$cache" && "`cat $cache | grep -w channelnr | wc -l`" = 1 ]]
 	then
@@ -244,7 +251,7 @@ function channel
 		if [[ -f "$cache" && "`cat $cache | grep -w "channame$((counta+1))" | wc -l`" = 1 ]]
 		then
 			channame=`cat $cache | grep -w "channame$((counta+1))" | cut -d "=" -f2 | tr -d "\"" | cut -d " " -f1`
-			echo "Channel $((counta+1)) is : $channame"
+			echo "Channel $((counta+1))          = $channame"
 		else	
 			echo "Include # in name of channel ie #main"
 			while [[ -z $channame ]] 
@@ -256,21 +263,26 @@ function channel
 		if [[ -f "$cache" && "`cat $cache | grep -w "channame$((counta+1))" | wc -l`" = 1 ]]
 		then
 			chanpasswd=`cat $cache | grep -w "channame$((counta+1))" | cut -d "=" -f2 | tr -d "\"" | cut -d " " -f2`
-			echo "Requires password: $chanpasswd"
+			echo "Requires password  = $chanpasswd"
 		else
-			echo -n "Does the bot require a password to get in to the channel ? [Y]es [N]o, default N : " ; read chanpasswd
+			echo -n "Channel password ? [Y]es [N]o, default N : " ; read chanpasswd
 		fi
 		
 		case $chanpasswd in
 		[Yy])
+                if [[ -f "$cache" && "`cat $cache | grep -w "announcechannels" | wc -l`" = 1 ]]
+                then
+                        echo "Channel mode       = password protected"
+                fi
+		
 		if [[ -f "$cache" && "`cat $cache | grep -w "channame$((counta+1))" | wc -l`" = 1 ]]
 		then
 			chanpassword=`cat $cache | grep -w "channame$((counta+1))" | cut -d "=" -f2 | tr -d "\"" | cut -d " " -f3`
-			echo "Password for channel $channame : $chanpassword"
+			echo "Channel password   = $chanpassword"
 		else
 			while [[ -z $chanpassword ]]
 			do
-				echo -n "Please enter the password for channel $channame : " ; read chanpassword
+				echo -n "Enter the channel password : " ; read chanpassword
 			done
 		fi
 			echo "channel set $channame chanmode {+ntpsk $chanpassword}" >> $rootdir/.tmp/bot.chan.tmp
@@ -289,10 +301,13 @@ function channel
 				echo "channame$((counta+1))=\"$channame $chanpasswd $chanpassword\"" >> $cache
 			fi
 			
-			echo
 			;;
 			[Nn])
-			echo "Channel $channame set to invite only by default"
+			if [[ -f "$cache" && "`cat $cache | grep -w "announcechannels" | wc -l`" = 1 ]]
+			then
+				echo "Channel mode       = invite only"
+			fi
+
 			echo "channel set $channame chanmode {+ntpsi}" >> $rootdir/.tmp/bot.chan.tmp
 			echo "channel add $channame {" >> $rootdir/.tmp/eggchan
 			echo "idle-kick 0" >> $rootdir/.tmp/eggchan
@@ -309,10 +324,12 @@ function channel
 				echo "channame$((counta+1))=\"$channame n nopass\"" $cache
 			fi
 		
-			echo
 			;;
 			*)
-			echo "Channel $channame set to invite only by default"
+                        if [[ -f "$cache" && "`cat $cache | grep -w "announcechannels" | wc -l`" = 1 ]]
+                        then
+                                echo "Channel mode       = invite only"
+                        fi
 			echo "channel set $channame chanmode {+ntpsi}" >> $rootdir/.tmp/bot.chan.tmp
 			echo "channel add $channame {" >> $rootdir/.tmp/eggchan
 			echo "idle-kick 0" >> $rootdir/.tmp/eggchan
@@ -329,7 +346,6 @@ function channel
 				echo "channame$((counta+1))=\"$channame n nopass\"" >> $cache
 			fi
 			
-			echo
 			;;
 		esac
 		channame=""
@@ -345,9 +361,9 @@ function announce
 	if [[ -f "$cache" && "`cat $cache | grep -w announcechannels | wc -l`" = 1 ]]
 	then
 		announcechannels=`cat $cache | grep -w announcechannels | cut -d "=" -f2 | tr -d "\""`
-		echo "Announce channels set to : $announcechannels"
+		echo "Announce channels  = $announcechannels"
 	else
-		echo -n "Which of these channels do you want to be announce channels ? Include # in name, default: `cat $rootdir/.tmp/channels` : " ; read announcechannels
+		echo -n "Which should be announce channels,  default: `cat $rootdir/.tmp/channels` : " ; read announcechannels
 	fi
 	
 	if [ "$announcechannels" = "" ] 
@@ -373,16 +389,15 @@ function announce
 
 function opschan
 {
-	echo
 	if [[ -f "$cache" && "`cat $cache | grep -w channelops | wc -l`" = 1 ]]
 	then
 		channelops=`cat $cache | grep -w channelops | cut -d "=" -f2 | tr -d "\""`
-		echo "Ops channel set to : $channelops"
+		echo "Ops channel        = $channelops"
 	else
 		echo "Channels: `cat $rootdir/.tmp/channels`"
 		while [[ -z $channelops ]]
 		do
-			echo -n "Which of these channels do you want as ops channel ? Include # in name: " ; read channelops
+			echo -n "Which of these channels as ops channel ? : " ; read channelops
 		done
 	fi
 	
@@ -401,7 +416,7 @@ function ircnickname
 	if [[ -f "$cache" && "`cat $cache | grep -w ircnickname | wc -l`" = 1 ]]
 	then
 		ircnickname=`cat $cache | grep -w ircnickname | cut -d "=" -f2 | tr -d "\""`
-		echo "Your nickname on irc is : $ircnickname"
+		echo "Nickname           = $ircnickname"
 	else	
 		while [[ -z $ircnickname ]] 
 		do
@@ -462,7 +477,6 @@ function section_generate
 	if [[ -f "$cache" && "`cat $cache | grep -w "section$((counta+1))" | wc -l`" = 1 ]]
 	then
 		section=`cat $cache | grep -w "section$((counta+1))" | cut -d "=" -f2 | tr -d "\""`
-		echo "Section $section created"
 	else
 		echo -n "Section $((counta+1)) is : " ; read section
 	fi
@@ -552,14 +566,38 @@ function incom
 ## GLFTPD
 function glftpd
 {
+	if [[ -f "$cache" && "`cat $cache | grep -w eur0presystem | wc -l`" = 1 ]]
+	then
+		echo "Sections           = `cat $rootdir/.tmp/.validsections`"
+	fi
+	if [[ -f "$cache" && "`cat $cache | grep -w router | wc -l`" = 1 ]]
+        then
+                echo "Router             = "`cat $cache | grep -w router | cut -d "=" -f2 | tr -d "\""`
+        fi
+        if [[ -f "$cache" && "`cat $cache | grep -w pasv_addr | wc -l`" = 1 ]]
+        then
+                echo "Passive address    = "`cat $cache | grep -w pasv_addr | cut -d "=" -f2 | tr -d "\""`
+        fi
+        if [[ -f "$cache" && "`cat $cache | grep -w pasv_ports | wc -l`" = 1 ]]
+        then
+                echo "Port range         = "`cat $cache | grep -w pasv_ports | cut -d "=" -f2 | tr -d "\""`
+        fi
+        if [[ -f "$cache" && "`cat $cache | grep -w psxcimdbchan | wc -l`" = 1 ]]
+        then
+                echo "IMDB trigger chan  = "`cat $cache | grep -w psxcimdbchan | cut -d "=" -f2 | tr -d "\""`
+        fi
+
+	echo
+	echo "--------[ Installation of software and scripts ]----------------------"
 	packages/scripts/tur-rules/rulesgen.sh MISC
 	cd packages
 	echo
-	echo -n "Installing $PK1DIR, please wait..."
+	echo -n "Installing $PK1DIR, please wait...           "
 	echo "####### Here starts glFTPD scripts #######" >> /var/spool/cron/crontabs/root
 	#cd $PK1DIR ; mv -f ../data/installgl.sh ./ ; ./installgl.sh >/dev/null 2>&1
 	cd $PK1DIR && sed "s/changeme/$port/" ../data/installgl.sh.org > installgl.sh && chmod +x installgl.sh && ./installgl.sh >/dev/null 2>&1
 	$glroot/libcopy.sh >/dev/null 2>&1
+	echo -e "[\e[32mDone\e[0m]"
 	cd ../data
 	echo "##########################################################################" > glftpd.conf
 	echo "# Server shutdown: 0=server open, 1=deny all but siteops, !*=deny all, etc" >> glftpd.conf
@@ -577,10 +615,8 @@ function glftpd
 	then
 		router=`cat $cache | grep -w router | cut -d "=" -f2 | tr -d "\""`
 	else
-		echo
 		echo -n "Do you use a router ? [Y]es [N]o, default N : " ; read router
 	fi
-	
 	case $router in
 		[Yy])
 		wgetbinary=`which wget`
@@ -590,7 +626,7 @@ function glftpd
 			then
 				pasv_addr=`cat $cache | grep -w pasv_addr | cut -d "=" -f2 | tr -d "\""`
 			else	
-				echo -n "Please enter the DNS or IP you wish to use for the site, default $ipcheck : " ; read pasv_addr
+				echo -n "Please enter the DNS or IP for the site, default $ipcheck : " ; read pasv_addr
 			fi
 			
 			if [ "$pasv_addr" = "" ] 
@@ -602,7 +638,7 @@ function glftpd
 			then
 				pasv_ports=`cat $cache | grep -w pasv_ports | cut -d "=" -f2 | tr -d "\""`
 			else
-				echo -n "Please enter the port range you wish to use for passive mode, default 6000-7000 : " ; read pasv_ports
+				echo -n "Please enter the port range for passive mode, default 6000-7000 : " ; read pasv_ports
 			fi
 		
 		echo "pasv_addr		$pasv_addr	1" >> glftpd.conf
@@ -676,17 +712,22 @@ function glftpd
 	ln -s $glroot/etc/glftpd.conf /etc/glftpd.conf
 	chmod 777 $glroot/ftp-data/msgs
 	cp ../scripts/extra/update_perms.sh $glroot/bin
+	cp ../scripts/section_manager/section_manager.sh $glroot
+	sed -i "s|changeme|$device|" $glroot/section_manager.sh
 	chown -R root:root $glroot/bin
 	chmod u+s $glroot/bin/undupe
 	chmod u+s $glroot/bin/sed
 	chmod u+s $glroot/bin/nuker
-	echo
 }
 
 ## EGGDROP
 function eggdrop
 {
-	echo -n "Installing $PK3DIR, please wait..."
+	if [[ -f "$cache" && "`cat $cache | grep -w eur0presystem | wc -l`" = 0 ]]
+	then
+		echo
+	fi
+	echo -n "Installing $PK3DIR, please wait...                        "
 	cd ../$PK3DIR ; ./configure --prefix="$glroot/sitebot" >/dev/null 2>&1 && make config >/dev/null 2>&1  && make >/dev/null 2>&1 && make install >/dev/null 2>&1
 	cd ../data
 	cat egghead > eggdrop.conf
@@ -740,26 +781,24 @@ function eggdrop
 	cp ../data/kill.sh $glroot/sitebot
 	sed -i "s/changeme/$sitename/g" $glroot/sitebot/kill.sh
 	echo "source scripts/tur-free.tcl" >> $glroot/sitebot/eggdrop.conf
+	echo -e "[\e[32mDone\e[0m]"
 }
 
 function irc
 {
 	if [[ -f "$cache" && "`cat $cache | grep -w ircserver | wc -l`" = 1 ]]
 	then
-		ircserver=`cat $cache | grep -w ircserver | cut -d "=" -f2 | tr -d "\""`
-		echo
-		echo -n "Set irc server details : $ircserver"
 		sed -i "s/servername/$ircserver/" $glroot/sitebot/eggdrop.conf
 	else
 		echo
-		echo -n "What irc server will the bot be on ? default irc.example.org : " ; read servername
+	    	echo -n "What irc server ? default irc.example.org : " ; read servername
 	
 		if [ "$servername" = "" ] 
 		then
 			servername="irc.example.org"
 		fi
 		
-		echo -n "What port does the irc server run on ? default 7000 : " ; read serverport
+		echo -n "What port for irc server ? default 7000 : " ; read serverport
 		if [ "$serverport" = "" ] 
 		then
 			serverport="7000"
@@ -778,7 +817,7 @@ function irc
 			;;
 		esac
 		
-		echo -n "Does the irc server require a password ? [Y]es [N]o, default N : " ; read serverpassword
+		echo -n "Does it require a password ? [Y]es [N]o, default N : " ; read serverpassword
 		case $serverpassword in
 			[Yy])
 			echo -n "Please enter the password for irc server, default ircpassword : " ; read password
@@ -816,7 +855,6 @@ function irc
 			;;
 		esac
 	fi
-	echo
 }
 
 ## zsconfig.h
@@ -858,9 +896,14 @@ function pzsbotfile
 ## PROJECTZS
 function pzsng
 {
-	echo -n "Installing PZS-NG, please wait..."
+	if [[ -f "$cache" && "`cat $cache | grep -w eur0presystem | wc -l`" = 0 ]]
+	then
+		echo
+	fi
+	echo -n "Installing PZS-NG, please wait...                               "
 	cd packages/pzs-ng
 	./configure >/dev/null 2>&1 ; make >/dev/null 2>&1 ; make install >/dev/null 2>&1
+	echo -e "[\e[32mDone\e[0m]"
 	cp sitebot/ngB* $glroot/sitebot/scripts/pzs-ng/
 	cp -r sitebot/modules $glroot/sitebot/scripts/pzs-ng/
 	cp -r sitebot/plugins $glroot/sitebot/scripts/pzs-ng/
@@ -869,7 +912,6 @@ function pzsng
 	cd ../scripts
 	chmod u+s $glroot/bin/cleanup
 	rm -f $glroot/sitebot/scripts/pzs-ng/ngBot.conf.dist
-	echo
 }
 
 ## eur0-pre-system
@@ -883,7 +925,7 @@ function presystem
 		echo -e "\e[4mDescription for Eur0-pre-system + foo-pre:\e[0m"
 		cat $rootdir/packages/scripts/eur0-pre-system/description
 		echo
-		echo -n "Do you want to install Eur0-pre-system + foo-pre ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Eur0-pre-system + foo-pre ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -899,7 +941,7 @@ function presystem
 			echo "eur0presystem=\"y\"" >> $cache
 		fi
 
-		echo -n "Installing Eur0-pre-system + foo-pre, please wait..."
+		echo -n "Installing Eur0-pre-system + foo-pre, please wait...            "
 		cd eur0-pre-system
 		make  >/dev/null 2>&1
 		make install  >/dev/null 2>&1
@@ -927,6 +969,7 @@ function presystem
 		./configure -q && make build >/dev/null 2>&1
 		cp pre/foo-pre $glroot/bin && chmod u+s $glroot/bin/foo-pre
 		make -s distclean
+		echo -e "[\e[32mDone\e[0m]"
 		cd ../../
 		cat foo-tools/src/pre/pre.cfg > $glroot/etc/pre.cfg
 		sections=`cat $rootdir/.tmp/.validsections | sed "s/REQUEST//g" | sed "s/ /|/g" | sed "s/|$//g"`
@@ -939,7 +982,6 @@ function presystem
 		mknod $glroot/dev/full c 1 7 && chmod 666 $glroot/dev/full
 		mknod $glroot/dev/urandom c 1 9 && chmod 666 $glroot/dev/urandom
 		cd ..
-		echo
 		;;
 	esac
 }
@@ -955,7 +997,7 @@ function slvprebw
                 echo -e "\e[4mDescription for slv-PreBW:\e[0m"
                 cat $rootdir/packages/scripts/slv-prebw/description
 		echo
-		echo -n "Do you want to install slv-PreBW ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install slv-PreBW ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -971,11 +1013,11 @@ function slvprebw
 			echo "slvprebw=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing slv-PreBW, please wait..."
+		echo -n "Installing slv-PreBW, please wait...                            "
 		cp slv-prebw/*.sh $glroot/bin 
 		cp slv-prebw/*.tcl $glroot/sitebot/scripts/pzs-ng/plugins
 		echo "source scripts/pzs-ng/plugins/PreBW.tcl" >> $glroot/sitebot/eggdrop.conf
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -991,7 +1033,7 @@ function idlebotkick
                 echo -e "\e[4mDescription for Idlebotkick:\e[0m"
                 cat $rootdir/packages/scripts/idlebotkick/description
 		echo
-		echo -n "Do you want to install Idlebotkick ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Idlebotkick ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1006,14 +1048,14 @@ function idlebotkick
 		then
 			echo "idlebotkick=\"y\"" >> $cache
 		fi
-		echo -n "Installing Idlebotkick, please wait..."
+		echo -n "Installing Idlebotkick, please wait...                          "
 		cd idlebotkick
 		cp idlebotkick.sh $glroot/bin
 		chmod 755 $glroot/bin/idlebotkick.sh
 		cp idlebotkick.tcl $glroot/sitebot/scripts
 		echo "source scripts/idlebotkick.tcl" >> $glroot/sitebot/eggdrop.conf
 		cd ..
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1029,7 +1071,7 @@ function ircadmin
                 echo -e "\e[4mDescription for Tur-Ircadmin:\e[0m"
                 cat $rootdir/packages/scripts/tur-ircadmin/description
 		echo
-		echo -n "Do you want to install Tur-Ircadmin ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Ircadmin ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1045,7 +1087,7 @@ function ircadmin
 			echo "ircadmin=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Tur-Ircadmin, please wait..."
+		echo -n "Installing Tur-Ircadmin, please wait...                       	"
 		cd tur-ircadmin
 		cp tur-ircadmin.sh $glroot/bin
 		chmod 755 $glroot/bin/tur-ircadmin.sh
@@ -1056,7 +1098,7 @@ function ircadmin
 		sed -i "s/changeme/$channelops/" $glroot/sitebot/scripts/tur-ircadmin.tcl
 		sed -i "s/changeme/$port/" $glroot/bin/tur-ircadmin.sh
 		cd ..
-		echo		
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1072,7 +1114,7 @@ function request
                 echo -e "\e[4mDescription for Tur-Request:\e[0m"
                 cat $rootdir/packages/scripts/tur-request/description
 		echo
-		echo -n "Do you want to install Tur-Request ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Request ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1088,7 +1130,7 @@ function request
 			echo "request=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Tur-Request, please wait..."
+		echo -n "Installing Tur-Request, please wait...                       	"
 		cd tur-request
 		cp tur-request.sh $glroot/bin
 		chmod 755 $glroot/bin/tur-request.sh
@@ -1103,7 +1145,7 @@ function request
 		echo "source scripts/tur-request.auth.tcl" >> $glroot/sitebot/eggdrop.conf
 		cat gl >> $glroot/etc/glftpd.conf
 		cd ..
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1119,7 +1161,7 @@ function trial
                 echo -e "\e[4mDescription for Tur-Trial3:\e[0m"
                 cat $rootdir/packages/scripts/tur-trial3/description
 		echo
-		echo -n "Do you want to install Tur-Trial3 ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Trial3 ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1145,7 +1187,7 @@ function trial
 			echo
 		fi
 		
-		echo -n "Installing Tur-Trial3, please wait..."
+		echo -n "Installing Tur-Trial3, please wait...                       	"
 		cd tur-trial3 
 		cp *.sh $glroot/bin
 		cp tur-trial3.conf $glroot/bin
@@ -1165,7 +1207,7 @@ function trial
 		cat gl >> $glroot/etc/glftpd.conf
 		cd ..
 		touch $glroot/ftp-data/logs/tur-trial3.log
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1181,7 +1223,7 @@ function vacation
                 echo -e "\e[4mDescription for Tur-Vacation:\e[0m"
                 cat $rootdir/packages/scripts/tur-vacation/description
 		echo
-		echo -n "Do you want to install Tur-Vacation ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Vacation ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1197,11 +1239,12 @@ function vacation
 			echo "vacation=\"y\"" >> $cache
 		fi
 		
-		echo "Installing Tur-Vacation, please wait..."
+		echo -n "Installing Tur-Vacation, please wait...                       	"
 		cp tur-vacation/tur-vacation.sh $glroot/bin
 		touch $glroot/etc/vacation.index ; chmod 666 $glroot/etc/vacation.index
 		touch $glroot/etc/quota_vacation.db ; chmod 666 $glroot/etc/quota_vacation.db
 		cat tur-vacation/gl >> $glroot/etc/glftpd.conf
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1217,7 +1260,7 @@ function whereami
                 echo -e "\e[4mDescription for Whereami:\e[0m"
                 cat $rootdir/packages/scripts/whereami/description
 		echo
-		echo -n "Do you want to install Whereami ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Whereami ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1233,12 +1276,12 @@ function whereami
 			echo "whereami=\"y\"" >> $cache
 		fi
 
-		echo -n "Installing Whereami, please wait..."
+		echo -n "Installing Whereami, please wait...                             "
 		cp whereami/whereami.sh $glroot/bin
 		chmod 755 $glroot/bin/whereami.sh
 		cp whereami/whereami.tcl $glroot/sitebot/scripts
 		echo "source scripts/whereami.tcl" >> $glroot/sitebot/eggdrop.conf
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 	esac
 }
 
@@ -1254,7 +1297,7 @@ function undupe
                 echo -e "\e[4mDescription for Tur-Undupe:\e[0m"
                 cat $rootdir/packages/scripts/tur-undupe/description
 		echo
-		echo -n "Do you want to install Tur-Undupe ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Undupe ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1270,13 +1313,13 @@ function undupe
 			echo "undupe=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Tur-Undupe, please wait..."
+		echo -n "Installing Tur-Undupe, please wait...                       	"
 		cp tur-undupe/tur-undupe.sh $glroot/bin
 		chmod 755 $glroot/bin/tur-undupe.sh
 		chmod 6755 $glroot/bin/undupe
 		cp tur-undupe/tur-undupe.tcl $glroot/sitebot/scripts
 		echo "source scripts/tur-undupe.tcl" >> $glroot/sitebot/eggdrop.conf
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1292,7 +1335,7 @@ function precheck
 		echo -e "\e[4mDescription for Precheck:\e[0m"
 		cat $rootdir/packages/scripts/precheck/description
 		echo
-		echo -n "Do you want to install Precheck ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Precheck ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1308,13 +1351,13 @@ function precheck
 			echo "precheck=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Precheck, please wait..."
+		echo -n "Installing Precheck, please wait...                             "
 		cp precheck/precheck*.sh $glroot/bin
 		chmod +x $glroot/bin/precheck*.sh
 		cp precheck/precheck.tcl $glroot/sitebot/scripts
 		echo "source scripts/precheck.tcl" >> $glroot/sitebot/eggdrop.conf
 		touch $glroot/ftp-data/logs/precheck.log
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1330,7 +1373,7 @@ function autonuke
                 echo -e "\e[4mDescription for Tur-Autonuke:\e[0m"
                 cat $rootdir/packages/scripts/tur-autonuke/description
 		echo
-		echo -n "Do you want to install Tur-Autonuke ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Autonuke ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1346,12 +1389,12 @@ function autonuke
 			echo "autonuke=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Tur-Autonuke, please wait..."
+		echo -n "Installing Tur-Autonuke, please wait...                       	"
 		mv tur-autonuke/tur-autonuke.conf $glroot/bin
 		cp tur-autonuke/tur-autonuke.sh $glroot/bin
 		echo "*/10 * * * *		$glroot/bin/tur-autonuke.sh >/dev/null 2>&1" >> /var/spool/cron/crontabs/root
 		touch $glroot/ftp-data/logs/tur-autonuke.log
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1367,7 +1410,7 @@ function psxcimdb
                 echo -e "\e[4mDescription for PSXC-IMDB:\e[0m"
                 cat $rootdir/packages/scripts/psxc-imdb/description
 		echo
-		echo -n "Do you want to install PSXC-IMDB ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install PSXC-IMDB ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1389,12 +1432,12 @@ function psxcimdb
 		else
 			while [[ -z $imdbchan ]] 
 			do
-				echo -n "Which channel would you like to use as the IMDB trigger chan ie #main : " ; read imdbchan
+				echo -n "IMDB trigger chan for !imdb requests : " ; read imdbchan
 			done
 		fi
 		
 		
-		echo -n "Installing PSXC-IMDB, please wait..."
+		echo -n "Installing PSXC-IMDB, please wait...                            "
 		cd psxc-imdb
 		cp ./extras/* $glroot/bin
 		cp ./addons/* $glroot/bin
@@ -1406,6 +1449,7 @@ function psxcimdb
 		touch $glroot/ftp-data/logs/psxc-moviedata.log ; chmod 666 $glroot/ftp-data/logs/psxc-moviedata.log
 		echo "source scripts/pzs-ng/plugins/psxc-imdb.tcl" >> $glroot/sitebot/eggdrop.conf
 		cat gl >> $glroot/etc/glftpd.conf
+		echo -e "[\e[32mDone\e[0m]"
 		CHECK=`cat $glroot/etc/glftpd.conf | grep -w ".imdb"`
 		
 		if [ "$CHECK" = "" ] 
@@ -1416,7 +1460,6 @@ function psxcimdb
 		
 		sed -i "s/#changethis/$imdbchan/" $glroot/sitebot/scripts/pzs-ng/plugins/psxc-imdb.tcl
 		cd ..
-		echo
 		
 		if [ "`cat $cache | grep -w psxcimdbchan= | wc -l`" = 0 ]
 		then
@@ -1437,7 +1480,7 @@ function addip
 		echo -e "\e[4mDescription for Tur-Addip:\e[0m"
                 cat $rootdir/packages/scripts/tur-addip/description
 		echo
-		echo -n "Do you want to install Tur-Addip ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Addip ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1453,7 +1496,7 @@ function addip
 			echo "addip=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Tur-Addip, please wait..."
+		echo -n "Installing Tur-Addip, please wait...                            "
 		cd tur-addip
 		cp *.tcl $glroot/sitebot/scripts
 		cp *.sh $glroot/bin
@@ -1461,7 +1504,7 @@ function addip
 		touch $glroot/ftp-data/logs/tur-addip.log ; chmod 666 $glroot/ftp-data/logs/tur-addip.log
 		sed -i "s/changeme/$port/" $glroot/bin/tur-addip.sh
 		cd ..
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1477,7 +1520,7 @@ function oneline_stats
                 echo -e "\e[4mDescription for Tur-Oneline_stats:\e[0m"
                 cat $rootdir/packages/scripts/tur-oneline_stats/description
 		echo
-		echo -n "Do you want to install Tur-Oneline_Stats ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Tur-Oneline_Stats ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1493,13 +1536,13 @@ function oneline_stats
 			echo "oneline_stats=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Tur-Oneline_Stats, please wait..."
+		echo -n "Installing Tur-Oneline_Stats, please wait...                    "
 		cd tur-oneline_stats
 		cp *.tcl $glroot/sitebot/scripts
 		cp *.sh $glroot/bin 
 		echo "source scripts/tur-oneline_stats.tcl" >> $glroot/sitebot/eggdrop.conf
 		cd ..
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1515,7 +1558,7 @@ function ircnick
                 echo -e "\e[4mDescription for Ircnick:\e[0m"
                 cat $rootdir/packages/scripts/ircnick/description
 		echo
-		echo -n "Do you want to install Ircnick ? [Y]es [N]o, default Y : " ; read ask
+		echo -n "Install Ircnick ? [Y]es [N]o, default Y : " ; read ask
 	fi
 	
 	case $ask in
@@ -1531,11 +1574,11 @@ function ircnick
 			echo "ircnick=\"y\"" >> $cache
 		fi
 		
-		echo -n "Installing Ircnick, please wait..."
+		echo -n "Installing Ircnick, please wait...                              "
 		cp ircnick/*.sh $glroot/bin
 		cp ircnick/*.tcl $glroot/sitebot/scripts
 		echo "source scripts/ircnick.tcl" >> $glroot/sitebot/eggdrop.conf
-		echo
+		echo -e "[\e[32mDone\e[0m]"
 		;;
 	esac
 }
@@ -1548,7 +1591,7 @@ function usercreation
 		username=`cat $cache | grep -w username | cut -d "=" -f2 | tr -d "\""`
 	else
 		echo
-		echo -n "Please enter the name of the Admininstrator account, default admin : " ; read username
+		echo -n "Please enter the username of admin, default admin : " ; read username
 	fi
 	
 	if [ "$username" = "" ] 
@@ -1560,7 +1603,7 @@ function usercreation
 	then
 		password=`cat $cache | grep -w password | cut -d "=" -f2 | tr -d "\""`
 	else
-		echo -n "Please enter the password for the account [$username], default password : " ; read password
+		echo -n "Please enter the password [$username], default password : " ; read password
 	fi
 	
 	if [ "$password" = "" ] 
@@ -1575,7 +1618,7 @@ function usercreation
 	then
 		ip=`cat $cache | grep -w ip | cut -d "=" -f2 | tr -d "\""`
 	else
-		echo -n "What ip should I set for [$username] ? Min requirement is *@xxx.xxx.* default *@${localip} : " ; read ip
+		echo -n "IP for [$username] ? Minimum *@xxx.xxx.* default *@${localip} : " ; read ip
 	fi
 	
 	if [ "$ip" = "" ] 
@@ -1604,7 +1647,6 @@ function usercreation
 	ncftpls -u glftpd -p glftpd -P $port -Y "site chgrp glftpd SiteOP" $connection > /dev/null
 	echo
 	echo "[$username] created successfully and added to the groups Admin and SiteOP"
-	echo
 	echo "These groups were also created: NUKERS, iND, VACATION & Friends"
 	sed -i "s/changeme/$username/" $glroot/sitebot/eggdrop.conf
 	sed -i "s/sname/$sitename/" $glroot/sitebot/scripts/pzs-ng/ngBot.conf

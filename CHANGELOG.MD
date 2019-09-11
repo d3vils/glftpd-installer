@@ -1,11 +1,28 @@
+## 9.0 - 2019-09-11
+
+### Added
+
+- Section Manager added which will be part of the core installation that will be found in root dir of /glftpd after installation for easy access, no more 
+tedious manual updates of scripts due to add/del of sections
+
+### Updated
+
+- Did a big overhaul of the code to make it look better and also give a better overview both during normal and unattended installations
+- Updated psxc-imdb settings and disabled the use of psxc-imdb-dotimdb.pl for the creation of .imdb
+- Updated README with new screenshots
+
+### Fixes
+
+- setupsql.sh did not work properly due to change in MySQL language + if user had empty password for accessing db
+
+
 ## 8.5 - 2019-09-08
 
 ### Fixes
 
 - Enabled highlightning of description for scripts during install to make it easier spotting relevant information
 - Changed name of function to avoid conflict with system commands
-- Enabled the copy of cleanup script much earlier in the script in case someone decides to abort in the middle of things 
-and want to remove things from system
+- Enabled the copy of cleanup script much earlier in the script in case someone decides to abort in the middle of things and want to remove things from system
 - Optimized installer by removing some unnecessary code and updated methods of handling files 
 - Gone through the creation of glftpd.conf and created better indentation to give better overview
 - Updated permissions for some commands
@@ -660,7 +677,7 @@ NOTE: This installer is made for Slackware Linux and may not even
 install on your distro, at the moment the authors have no plans to release
 the installer for other distros.
 
-### Updates
+### Updated
 
 - GLFTPD has been updated to 2.0 RC1
 - Eggdrop has been updated to 1.6.16
