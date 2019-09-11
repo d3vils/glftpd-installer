@@ -18,8 +18,10 @@ git clone https://github.com/teqnodude/glftpd-installer
 *  eur0-pre-system(add/del/list affils part only)
 *  foo-tools(only foo-pre installed)
 *  idlebotkick
+*  ircnick
 *  precheck
 *  psxc-imdb
+*  section manager
 *  slv-PreBW
 *  tuls
 *  tur-addip
