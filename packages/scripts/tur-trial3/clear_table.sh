@@ -81,8 +81,14 @@ fi
 echo ""
 unset go
 
-SQLDB="$mysql -u $user -p"$pass" -h $host -N -e"
-SQL="$mysql -u $user -p"$pass" -h $host -D $database -N -e"
+if [ -z "$pass" ]
+then
+	SQLDB="$mysql -u $user -h $host -N -e"
+	SQL="$mysql -u $user -h $host -D $database -N -e"
+else
+	SQLDB="$mysql -u $user -p"$pass" -h $host -N -e"
+	SQL="$mysql -u $user -p"$pass" -h $host -D $database -N -e"
+fi
 
 
 until [ -n "$go" ]; do

@@ -1,3 +1,16 @@
+## 9.x
+
+### Added
+
+- Included my own Tur-Predircheck Manager to enable management of blocks inside Tur-Predircheck through IRC
+
+### Fixes
+
+- Fixed clear_table.sh since it didn't work if no pass was entered
+- Fixed tur-addip.tcl so mainchan is automatically set to the chosen ops channel during install for public trigger !addip. Chose ops channel for security reasons
+- Port in idlebotkick were previously not set to the port chosen during install
+
+
 ## 9.0 - 2019-09-11
 
 ### Added
@@ -29,7 +42,7 @@ tedious manual updates of scripts due to add/del of sections
 - Removed various traces of personal settings in various scripts which I forgot
 - Ensured that all scripts that require log file are now having them created during install and set with proper permissions
 - Removed listwho from Idlebotkick since it got replaced with tur-ftpwho a long time ago
-- Many minor issues with echoing info during installation, nothing critical.
+- Many minor issues with echoing info during installation, nothing critical
 
 ### Updated
 

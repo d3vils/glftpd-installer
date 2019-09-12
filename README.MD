@@ -32,6 +32,7 @@ git clone https://github.com/teqnodude/glftpd-installer
 *  tur-oneline_stats
 *  tur-precheck
 *  tur-predircheck
+*  tur-predircheck manager
 *  tur-request
 *  tur-rules
 *  tur-space

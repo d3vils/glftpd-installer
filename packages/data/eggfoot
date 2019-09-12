@@ -32,9 +32,10 @@ logfile msbxco * 	"logs/eggdrop.log"
 
 ##### SCRIPTS #####
 source scripts/getops.tcl
+source scripts/seen.tcl
 
 ##### MY SCRIPTS #############
-source scripts/seen.tcl
-source scripts/rud-news.tcl
-source scripts/tur-rules.tcl
 source scripts/pzs-ng/ngBot.tcl
+source scripts/rud-news.tcl
+source scripts/tur-predircheck_manager.tcl
+source scripts/tur-rules.tcl

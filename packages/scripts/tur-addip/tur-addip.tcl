@@ -13,7 +13,7 @@
 bind pub - !addip pub:tur-addip
 bind msg - !addip msg:tur-addip
 
-set mainchan "#yourchan"
+set mainchan "changeme"
 
 ##############################################################################
 

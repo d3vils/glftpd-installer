@@ -83,7 +83,7 @@ ftp="/usr/bin/ncftpls"             # Path to the ftp binary.
 kickuser="glftpd"              # User that will log in to kick.
 pass="glftpd"                  # Password for above user.
 host="127.0.0.1"               # Host to connect to.
-port="21"                      # Port to connect to.
+port="changeme"                      # Port to connect to.
 
 TESTON="FALSE"                  # Allows running ./idlebotkick.sh test
                                # to display if it works or not.

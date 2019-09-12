@@ -291,10 +291,11 @@ EOF
 sed -i 's/sections="/sections="\nChangelog:^90./' packages/scripts/tur-rules/tur-rules.sh
 }
 
-if [ "$1" = "" ]; then
-echo
+if [ "$1" = "" ]
+then
+	echo
 else
-$1
+	$1
 fi
-#EOF
 
+exit 0

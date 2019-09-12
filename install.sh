@@ -141,7 +141,6 @@ function version
 	PK2DIR="pzs-ng"
 	PK3="eggdrop-1.8.4.tar.gz"
 	PK3DIR="eggdrop-1.8.4"
-	LOG="../../install.log"
 	UP="tar xf"
 	BOTU="sitebot"
 	
@@ -686,6 +685,7 @@ function glftpd
 	cp ../scripts/tur-space/tur-space.sh $glroot/bin
 	cp ../scripts/tur-precheck/tur-precheck.sh $glroot/bin
 	cp ../scripts/tur-predircheck/tur-predircheck.sh $glroot/bin
+	cp ../scripts/tur-predircheck_manager/tur-predircheck_manager.sh $glroot/bin
 	cp ../scripts/tur-free/tur-free.sh $glroot/bin
 	sed -i '/^SECTIONS/a '"TOTAL:$device" $glroot/bin/tur-free.sh
 	sed -i "s/changeme/$sitename/" $glroot/bin/tur-free.sh
@@ -778,7 +778,9 @@ function eggdrop
 	mv -f ../scripts/tur-rules/tur-rules.sh $glroot/bin
 	cp ../scripts/tur-rules/*.tcl $glroot/sitebot/scripts
 	cp ../scripts/tur-free/*.tcl $glroot/sitebot/scripts
-	cp ../data/kill.sh $glroot/sitebot
+	cp ../scripts/tur-predircheck_manager/tur-predircheck_manager.tcl $glroot/sitebot/scripts
+	sed -i "s/changeme/$channelops/g" $glroot/sitebot/scripts/tur-predircheck_manager.tcl
+	cp $rootdir/packages/data/kill.sh $glroot/sitebot
 	sed -i "s/changeme/$sitename/g" $glroot/sitebot/kill.sh
 	echo "source scripts/tur-free.tcl" >> $glroot/sitebot/eggdrop.conf
 	echo -e "[\e[32mDone\e[0m]"
@@ -1051,6 +1053,7 @@ function idlebotkick
 		echo -n "Installing Idlebotkick, please wait...                          "
 		cd idlebotkick
 		cp idlebotkick.sh $glroot/bin
+		sed -i "s/changeme/$port/g" $glroot/bin/idlebotkick.sh
 		chmod 755 $glroot/bin/idlebotkick.sh
 		cp idlebotkick.tcl $glroot/sitebot/scripts
 		echo "source scripts/idlebotkick.tcl" >> $glroot/sitebot/eggdrop.conf
@@ -1503,6 +1506,7 @@ function addip
 		echo "source scripts/tur-addip.tcl" >> $glroot/sitebot/eggdrop.conf
 		touch $glroot/ftp-data/logs/tur-addip.log ; chmod 666 $glroot/ftp-data/logs/tur-addip.log
 		sed -i "s/changeme/$port/" $glroot/bin/tur-addip.sh
+		sed -i "s/changeme/$channelops/" $glroot/sitebot/scripts/tur-addip.tcl
 		cd ..
 		echo -e "[\e[32mDone\e[0m]"
 		;;
