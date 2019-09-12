@@ -38,24 +38,27 @@ if [ $# -ge 1 ]; then
    /bin/delaffil $glftpd_conf $1 $pre_path $lines_num
    if [ -d "$pre_path/$1" ]; then
    	rm -rf "$pre_path/$1"
-        if [ -e /bin/tur-trial3.conf ]; then
-        echo "Removing affil from QUOTA_EXCLUDED_GROUPS in /glftpd/bin/tur-trial3.conf"
-        sed -i "/$1/d" /bin/tur-trial3.conf
+        if [ -e /bin/tur-trial3.conf ]
+	then
+    		echo "Removing affil from QUOTA_EXCLUDED_GROUPS in /glftpd/bin/tur-trial3.conf"
+    		sed -i "/$1/d" /bin/tur-trial3.conf
         fi
         echo "Removing affil from denygroups in /glftpd/bin/tur-predircheck.sh"
-        if [ `cat /bin/tur-predircheck.sh | grep DENYGROUPS=\"` = 'DENYGROUPS="/site:\-'"$1"'$"' ]; then
-        sed -i -r -e "s/\/site:\\\-$1\\\$//gI" /bin/tur-predircheck.sh
+        if [ `cat /bin/tur-predircheck.sh | grep DENYGROUPS=\"` = 'DENYGROUPS="/site:\-'"$1"'$"' ]
+	then
+    		sed -i -r -e "s/\/site:\\\-$1\\\$//gI" /bin/tur-predircheck.sh
         else
-        sed -i -r -e "s/\\\-$1\\\$\\|//gI" /bin/tur-predircheck.sh
-        sed -i -r -e "s/\\\-$1\\\$//gI" /bin/tur-predircheck.sh
-        sed -i -r -e "s/\\|\"/\"/gI" /bin/tur-predircheck.sh
+    		sed -i -r -e "s/\\\-$1\\\$\\|//gI" /bin/tur-predircheck.sh
+    		sed -i -r -e "s/\\\-$1\\\$//gI" /bin/tur-predircheck.sh
+    		sed -i -r -e "s/\\|\"/\"/gI" /bin/tur-predircheck.sh
         fi
         echo "Removing affil from hiddengroups in /glftpd/bin/sitewho.conf"
 	sed -i "/$1/d" /bin/sitewho.conf
-        if [ -e /etc/pre.cfg ]; then
-        echo "Removing affil from /glftpd/etc/pre.cfg"
-        sed -i "/group.$1.dir/d" /etc/pre.cfg
-        sed -i "/group.$1.allow/d" /etc/pre.cfg
+        if [ -e /etc/pre.cfg ]
+	then
+    		echo "Removing affil from /glftpd/etc/pre.cfg"
+    		sed -i "/group.$1.dir/d" /etc/pre.cfg
+    		sed -i "/group.$1.allow/d" /etc/pre.cfg
         fi
   	echo "Success! $pre_path/$1 has been removed."
 	echo "Group $1 is NO LONGER affiled on this site!!!"

@@ -38,22 +38,25 @@ if [ $# -ge 1 ]; then
    else
 	echo "Trying to add $pre_path/$1 to $glftpd_conf ..."
 	/bin/addaffil $glftpd_conf $1 $pre_path
-        if [ -e /bin/tur-trial3.conf ]; then
-        echo "Adding affil to QUOTA_EXCLUDED_GROUPS in /glftpd/bin/tur-trial3.conf"
-	sed -i '/^QUOTA_EXCLUDED_GROUPS=/a '"$1" /bin/tur-trial3.conf
+        if [ -e /bin/tur-trial3.conf ]
+	then
+    		echo "Adding affil to QUOTA_EXCLUDED_GROUPS in /glftpd/bin/tur-trial3.conf"
+		sed -i '/^QUOTA_EXCLUDED_GROUPS=/a '"$1" /bin/tur-trial3.conf
         fi
         echo "Adding affil to denygroups in /glftpd/bin/tur-predircheck.sh"
-        if [ `cat /bin/tur-predircheck.sh | grep DENYGROUPS=\"` = 'DENYGROUPS=""' ]; then
-        sed -i -r -e "s/DENYGROUPS=\"\"/DENYGROUPS=\"\/site:\\\-$1\\\$\"/" /bin/tur-predircheck.sh
+        if [ `cat /bin/tur-predircheck.sh | grep DENYGROUPS=\"` = 'DENYGROUPS=""' ]
+	then
+    		sed -i -r -e "s/DENYGROUPS=\"\"/DENYGROUPS=\"\/site:\\\-$1\\\$\"/" /bin/tur-predircheck.sh
         else
-        sed -i -r -e "s/DENYGROUPS=\"\/site:/DENYGROUPS=\"\/site:\\\-$1\\\$|/" /bin/tur-predircheck.sh
+    		sed -i -r -e "s/DENYGROUPS=\"\/site:/DENYGROUPS=\"\/site:\\\-$1\\\$|/" /bin/tur-predircheck.sh
         fi
         echo "Adding affil to hiddengroups in /glftpd/bin/sitewho.conf"
 	sed -i '/^hiddengroups/a '"$1" /bin/sitewho.conf
-        if [ -e /etc/pre.cfg ]; then
-        echo "Adding affil to /glftpd/etc/pre.cfg"
-        sed -i '/# group.dir/a group.'"$1"'.dir=/site/PRE/'"$1" /etc/pre.cfg
-        sed -i '/# group.allow/a group.'"$1"'.allow=' /etc/pre.cfg
+        if [ -e /etc/pre.cfg ]
+	then
+    		echo "Adding affil to /glftpd/etc/pre.cfg"
+    		sed -i '/# group.dir/a group.'"$1"'.dir=/site/PRE/'"$1" /etc/pre.cfg
+    		sed -i '/# group.allow/a group.'"$1"'.allow=' /etc/pre.cfg
 	fi
    fi
    if [ -d "$pre_path/$1" ]; then
