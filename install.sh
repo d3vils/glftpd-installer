@@ -1760,4 +1760,3 @@ echo
 echo "Installer script created by Teqno" 
 
 exit 0
-	
