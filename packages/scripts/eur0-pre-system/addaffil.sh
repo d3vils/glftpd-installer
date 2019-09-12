@@ -54,9 +54,20 @@ if [ $# -ge 1 ]; then
 	sed -i '/^hiddengroups/a '"$1" /bin/sitewho.conf
         if [ -e /etc/pre.cfg ]
 	then
-    		echo "Adding affil to /glftpd/etc/pre.cfg"
-    		sed -i '/# group.dir/a group.'"$1"'.dir=/site/PRE/'"$1" /etc/pre.cfg
-    		sed -i '/# group.allow/a group.'"$1"'.allow=' /etc/pre.cfg
+
+                if [ `cat /etc/pre.cfg | grep "# group.dir" | wc -l` = 1 ]
+                then
+                        sed -i '/# group.dir/a group.'"$1"'.dir=/site/PRE/'"$1" /etc/pre.cfg
+                else
+                        echo "group.$1.dir=/site/PRE/$1" >> /etc/pre.cfg
+                fi
+                if [ `cat /etc/pre.cfg | grep "# group.allow" | wc -l` = 1 ]
+                then
+                        sed -i '/# group.allow/a group.'"$1"'.allow=' /etc/pre.cfg
+                else
+                        echo "group.$1.allow=" >> /etc/pre.cfg
+                fi
+
 	fi
    fi
    if [ -d "$pre_path/$1" ]; then
