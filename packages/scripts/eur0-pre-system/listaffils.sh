@@ -18,10 +18,13 @@ glftpd_conf="/etc/glftpd.conf"
 privpaths=`cat $glftpd_conf | grep privpath | grep -v "/site/PRE/SiteOP" | awk '{print $2}' | sort`
 
 predirs=""
-for path in $privpaths; do
-	predirs="$predirs `basename $path`"
+for path in $privpaths
+do
+        predirs="$predirs `basename $path`"
 done
+
 echo $predirs
+
 exit 0
 
    

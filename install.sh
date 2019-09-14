@@ -966,14 +966,13 @@ function presystem
 		fi
 	
 		git clone https://github.com/silv3rr/foo-tools >/dev/null 2>&1
-		cp -f ../../data/pre.cfg foo-tools/src/pre
+		cp -f ../../data/pre.cfg $glroot/etc
 		cd foo-tools/src
 		./configure -q && make build >/dev/null 2>&1
 		cp pre/foo-pre $glroot/bin && chmod u+s $glroot/bin/foo-pre
 		make -s distclean
 		echo -e "[\e[32mDone\e[0m]"
 		cd ../../
-		cat foo-tools/src/pre/pre.cfg > $glroot/etc/pre.cfg
 		sections=`cat $rootdir/.tmp/.validsections | sed "s/REQUEST//g" | sed "s/ /|/g" | sed "s/|$//g"`
 		cat $rootdir/.tmp/footools >> $glroot/etc/pre.cfg
 		rm -f $rootdir/.tmp/footools

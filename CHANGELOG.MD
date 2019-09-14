@@ -10,6 +10,7 @@
 - Fixed tur-addip.tcl so mainchan is automatically set to the chosen ops channel during install for public trigger !addip. Chose ops channel for security reasons
 - Port in idlebotkick were previously not set to the port chosen during install
 - Added extra check in addaffil.sh in case someone removed the comment lines used as reference points
+- More cosmetic changes like better indentation and corrected typos
 
 ### Updated
 
