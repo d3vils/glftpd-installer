@@ -188,9 +188,9 @@ then
 	regexp=`echo $ARGS | awk -F " " '{print $4}'`
 	echo "unblocking $regexp in section $section"
 	$glroot/bin/sed -i -e "/\/site\/$section:/ s/$regexp//g" $predircheck
-	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/:\\|/:/gI" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
+	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
 fi
 
 if [[ "$ARGS" = "del section"* ]]

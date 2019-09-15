@@ -11,6 +11,7 @@
 - Port in idlebotkick were previously not set to the port chosen during install
 - Added extra check in addaffil.sh in case someone removed the comment lines used as reference points
 - More cosmetic changes like better indentation and corrected typos
+- Tur-predircheck_manager left double || after remove of block
 
 ### Updated
 
