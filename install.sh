@@ -62,10 +62,7 @@ cache="$rootdir/install.cache"
 # clean up comments and trailing spaces in install.cache to avoid problems with unattended installation
 if [ -f $cache ]
 then
-	sed -i 's/" #.*/"/g' $cache
-	sed -i 's/^#.*//g' $cache
-	sed -i '/^\s*$/d' $cache
-	sed -i 's/[ \t]*$//' $cache
+	sed -i -e 's/" #.*/"/g' -e 's/^#.*//g' -e '/^\s*$/d' -e 's/[ \t]*$//' $cache
 fi
 
 function start
