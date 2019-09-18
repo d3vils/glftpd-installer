@@ -12,6 +12,7 @@
 - Added extra check in addaffil.sh in case someone removed the comment lines used as reference points
 - More cosmetic changes like better indentation and corrected typos
 - Tur-predircheck_manager left double || after remove of block
+- Section Manager did not remove section from pre.cfg
 
 ### Updated
 

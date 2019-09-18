@@ -280,8 +280,8 @@ function eur0pre
                 before=`cat $addaffil | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1`
                 after=`cat $addaffil | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1 | sed 's/|/\n/g' | sort | grep -vw "$section$" | xargs | sed 's/ /|/g'`
 		sed -i "/allow=/s/$before/$after/g" $addaffil
-                before=`cat $foopre | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1`
-                after=`cat $foopre | grep "allow="| cut -d "=" -f2 | sed 's/|/\n/g' | sort | grep -vw "$section$" | xargs | sed 's/ /|/g'`
+                before=`cat $foopre | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1 | uniq`
+                after=`cat $foopre | grep "allow="| cut -d "=" -f2 | uniq | sed 's/|/\n/g' | sort | grep -vw "$section$" | xargs | sed 's/ /|/g'`
 		sed -i "/allow=/s/$before/$after/g" $foopre
 		sed -i "/section.$section\./d" $foopre
 		;;
