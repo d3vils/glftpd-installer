@@ -156,21 +156,14 @@ function pzsng
     then
 	    case $action in
 	        [Rr])
-		sed -i -r -e "s/\/site\/$section\/%m%d\///gI" $pzsng/zipscript/conf/zsconfig.h
-		sed -i -r -e "s/\/site\/$section\///gI" $pzsng/zipscript/conf/zsconfig.h
-	        sed -i 's/ "/"/g' $pzsng/zipscript/conf/zsconfig.h
-        	sed -i '/zip_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-                sed -i '/zip_dirs/s/ "/"/g' $pzsng/zipscript/conf/zsconfig.h
-	        sed -i '/zip_dirs/s/" /"/g' $pzsng/zipscript/conf/zsconfig.h
-	        sed -i '/check_for_missing_nfo_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-		sed -i '/check_for_missing_nfo_dirs/s/ "/"/g' $pzsng/zipscript/conf/zsconfig.h
-    	        sed -i '/check_for_missing_nfo_dirs/s/" /"/g' $pzsng/zipscript/conf/zsconfig.h
-	        sed -i '/cleanupdirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-		sed -i '/cleanupdirs/s/ "/"/g' $pzsng/zipscript/conf/zsconfig.h
-	        sed -i '/cleanupdirs/s/" /"/g' $pzsng/zipscript/conf/zsconfig.h
-		sed -i '/sfv_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-	        sed -i '/sfv_dirs/s/ "/"/g' $pzsng/zipscript/conf/zsconfig.h
-		sed -i '/sfv_dirs/s/" /"/g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i -r -e "s/\/site\/$section\/%m%d\///gI" $pzsng/zipscript/conf/zsconfig.h
+                sed -i -r -e "s/\/site\/$section\///gI" $pzsng/zipscript/conf/zsconfig.h
+                sed -i 's/ "$/"/g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i 's/" /"/g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i '/zip_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i '/check_for_missing_nfo_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i '/cleanupdirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i '/sfv_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
 	        ;;
 	        *)
 
