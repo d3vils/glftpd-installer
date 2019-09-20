@@ -24,7 +24,7 @@ VER=1.0
 glroot=/glftpd							 # path for glftpd dir
 pzsbot=$glroot/sitebot/scripts/pzs-ng/ngBot.conf		 # path for ngBot.conf 
 pzsng=$glroot/backup/pzs-ng		 			 # path for pzs-ng
-incoming=changeme					 	 # path for incoming device for glftpd
+incoming=/dev/sda1					 	 # path for incoming device for glftpd
 
 # Leave them empty if you want to disable them
 turautonuke=$glroot/bin/tur-autonuke.conf			 # path for tur-autonuke
@@ -156,14 +156,10 @@ function pzsng
     then
 	    case $action in
 	        [Rr])
-                sed -i -r -e "s/\/site\/$section\/%m%d\///gI" $pzsng/zipscript/conf/zsconfig.h
-                sed -i -r -e "s/\/site\/$section\///gI" $pzsng/zipscript/conf/zsconfig.h
+                sed -i -e "s/\/site\/$section\/%m%d\///gI" -e "s/\/site\/$section\///gI" $pzsng/zipscript/conf/zsconfig.h
                 sed -i 's/ "$/"/g' $pzsng/zipscript/conf/zsconfig.h
                 sed -i 's/" /"/g' $pzsng/zipscript/conf/zsconfig.h
-                sed -i '/zip_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-                sed -i '/check_for_missing_nfo_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-                sed -i '/cleanupdirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
-                sed -i '/sfv_dirs/s/  / /g' $pzsng/zipscript/conf/zsconfig.h
+                sed -i '/\//s/\/  \//\/ \//g' $pzsng/zipscript/conf/zsconfig.h
 	        ;;
 	        *)
 
@@ -270,8 +266,8 @@ function eur0pre
     then
 	    case $action in
 		[Rr])
-                before=`cat $addaffil | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1`
-                after=`cat $addaffil | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1 | sed 's/|/\n/g' | sort | grep -vw "$section$" | xargs | sed 's/ /|/g'`
+                before=`cat $addaffil | grep "allow=" | cut -d "=" -f2 | cut -d "'" -f1 | uniq`
+                after=`cat $addaffil | grep "allow=" | cut -d "=" -f2 | cut -d "'" -f1 | uniq | sed 's/|/\n/g' | sort | grep -vw "$section$" | xargs | sed 's/ /|/g'`
 		sed -i "/allow=/s/$before/$after/g" $addaffil
                 before=`cat $foopre | grep "allow="| cut -d "=" -f2 | cut -d "'" -f1 | uniq`
                 after=`cat $foopre | grep "allow="| cut -d "=" -f2 | uniq | sed 's/|/\n/g' | sort | grep -vw "$section$" | xargs | sed 's/ /|/g'`
