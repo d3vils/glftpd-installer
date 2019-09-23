@@ -67,9 +67,6 @@ verbose=0
 no_strict=0
 
 bold=
-grn=3
-pur=13
-gry=15
 dgry=14
 lred=4
 
@@ -170,3 +167,5 @@ else
 	IFS="$IFSORIG"
 	rm -f $glroot/tmp/incomplete-list-nuker.lock
 fi
+
+exit 0

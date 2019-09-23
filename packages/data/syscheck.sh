@@ -9,7 +9,8 @@ VER=1.0
 #--[ Script Start ]---------------------------------------------#
 
 echo "----------------------------- Regular Controller ------------------------------"
-for disk in `lsblk | grep "0 disk" | tr -s ' ' '-' | awk -F '-' '{print $1}'`; do
+for disk in `lsblk | grep "0 disk" | tr -s ' ' '-' | awk -F '-' '{print $1}'`
+do
         echo
         echo "`smartctl -i /dev/$disk | grep "Device Model:"` - `smartctl -i /dev/$disk | grep "User Capacity:"`"
         echo "`smartctl -i /dev/$disk | grep "Serial Number:"`"

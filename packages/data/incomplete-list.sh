@@ -49,7 +49,7 @@ lred=4
 if [ ! -z "$botconf" ] && [ -e "$botconf" ]
 then
 	sections="`grep "^set paths(" $botconf | sed 's/^set paths(\(.*\))[[:space:]]\{1,\}\"\(.*\)\*\"/\1:\2/'`"
-fi;
+fi
 
 IFSORIG="$IFS"
 IFS="
@@ -107,3 +107,5 @@ do
 done
 echo "No more incompletes found."
 IFS="$IFSORIG"
+
+exit 0
