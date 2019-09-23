@@ -1577,6 +1577,7 @@ function ircnick
 		echo -n "Installing Ircnick, please wait...                              "
 		cp ircnick/*.sh $glroot/bin
 		cp ircnick/*.tcl $glroot/sitebot/scripts
+		sed -i "s/changeme/$channelops/" $glroot/sitebot/scripts/ircnick.sh
 		echo "source scripts/ircnick.tcl" >> $glroot/sitebot/eggdrop.conf
 		echo -e "[\e[32mDone\e[0m]"
 		;;

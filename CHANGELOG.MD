@@ -19,6 +19,7 @@
 ### Updated
 
 - Updated README and included Tur-Predircheck Manager in the list of scripts
+- Changed ircnick to only display latest since it's the relevant and changed announce to ops chan instead of nick
 
 
 ## 9.0 - 2019-09-11

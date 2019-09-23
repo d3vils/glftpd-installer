@@ -14,7 +14,7 @@ VER=1.0
 if [ -z "$1" ]; then
 	echo "Syntax: !ircnick username"
 else
-	cat /glftpd/ftp-data/logs/glftpd.log | grep -i "invite:" | grep -i $1 | tail -3 | awk -F " " '{print $1" "$2" "$3" "$4" "$5" "$6" ircnick: "$7" username: "$8}'
+	cat /glftpd/ftp-data/logs/glftpd.log | grep -i "invite:" | grep -i $1 | tail -1 | awk -F " " '{print $1" "$2" "$3" "$4" "$5" "$6" ircnick: "$7" username: "$8}'
 fi
 
 exit 0
