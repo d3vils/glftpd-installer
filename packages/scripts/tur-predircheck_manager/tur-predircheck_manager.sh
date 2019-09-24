@@ -1,5 +1,5 @@
 #!/bin/bash
-VER=1.0
+VER=1.1
 #--[ Intro ]----------------------------------------------------#
 #                                                       	#
 # Tur-predircheck_manager. A script for lazy people to block  	#
@@ -45,7 +45,7 @@ irctrigger="!block"
 
 #--[ Script start ]---------------------------------------------#
 
-ARGS=`echo "$@" | cut -d ' ' -f2-`
+ARGS=`echo "$@" | cut -d ' ' -f2- | sed 's:[]\[\^\$\.\*\/]:\\\\&:g'`
 if [ "$ARGS" = "" ]
 then
 	echo '
@@ -79,25 +79,22 @@ then
 										
 	Blocking / Unblocking releases
 		
-	It is considered good practice to use \. when blocking 
-	releases at the end of the release name. 
+        It is considered good practice to use \. or \- when blocking
+        releases instead of just the word to ensure that block occurs correctly.
 		
-	When blocking releases with chars like \ - _ . you need to use \\\ 
-	to have this script insert it properly. 
-																									
-	Example: '$irctrigger' add release TV-HD \\\.MULTi\\\-
+	Example: '$irctrigger' add release TV-HD \.MULTi\-
 	Result: /site/TV-HD:\.MULTi\-|                 
 		
 	When unblocking releases it is a bit different where you
-	need to use \\ for chars like \ - _ . to remove it properly.
+	need to use \ for chars like \ - _ . to remove it properly.
 			
 	Example: /site/TV-HD:\.MULTi\-|                               
-	Result: '$irctrigger' del release TV-HD \\.MULTI\\-                  
+	Result: '$irctrigger' del release TV-HD \.MULTI\-                  
 																
 	When blocking releases that is starting or ending with something 
-	then you do this.
+	then you do this. ^ = Starting - $ = Ending
 																
-	Example: '$irctrigger' add release TV-HD ^Start.Test\\\.
+	Example: '$irctrigger' add release TV-HD ^Start.Test\.
 	Result: /site/TV-HD:^Start.Test\.
 											
 	Example: '$irctrigger' add release TV-HD Test.End$
@@ -114,13 +111,13 @@ then
 		
 	When blocking a group for a specific section you do this.
 		
-	Example: '$irctrigger' add release TV-HD \\\-GROUPNAME$
+	Example: '$irctrigger' add release TV-HD \-GROUPNAME$
 	Result: /site/TV-HD:\-GROUPNAME$						
 		
 	When unblocking a group for a sepcific section you do this.	    
 		
 	Example: /site/TV-HD:\-GROUPNAME$
-	Result: '$irctrigger' del release TV-HD \\-GROUPNAME\$
+	Result: '$irctrigger' del release TV-HD \-GROUPNAME\$
 		
 	---------------------------------------
 										
