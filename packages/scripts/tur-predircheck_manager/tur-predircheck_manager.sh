@@ -81,43 +81,35 @@ then
 		
         It is considered good practice to use \. or \- when blocking
         releases instead of just the word to ensure that block occurs correctly.
-		
-	Example: '$irctrigger' add release TV-HD \.MULTi\-
-	Result: /site/TV-HD:\.MULTi\-|                 
-		
-	When unblocking releases it is a bit different where you
-	need to use \ for chars like \ - _ . to remove it properly.
-			
-	Example: /site/TV-HD:\.MULTi\-|                               
-	Result: '$irctrigger' del release TV-HD \.MULTI\-                  
-																
-	When blocking releases that is starting or ending with something 
-	then you do this. ^ = Starting - $ = Ending
-																
-	Example: '$irctrigger' add release TV-HD ^Start.Test\.
-	Result: /site/TV-HD:^Start.Test\.
-											
-	Example: '$irctrigger' add release TV-HD Test.End$
-	Result: /site/TV-HD:Test.End$
-											
-	When unblocking releases that starting or ending with something 
-	you got to use \ to remove it properly.
-																
-	Example: /site/TV-HD:^Start.Test                     
-	Result: '$irctrigger' del TV-HD \^Start.Test
-											
-	Example: /site/TV-HD:Start.End$                     
-	Result: '$irctrigger' del TV-HD Start.End\$
-		
-	When blocking a group for a specific section you do this.
-		
-	Example: '$irctrigger' add release TV-HD \-GROUPNAME$
-	Result: /site/TV-HD:\-GROUPNAME$						
-		
-	When unblocking a group for a sepcific section you do this.	    
-		
-	Example: /site/TV-HD:\-GROUPNAME$
-	Result: '$irctrigger' del release TV-HD \-GROUPNAME\$
+
+        Example: '$irctrigger' add release TV-HD \.MULTi\-
+        Result: /site/TV-HD:\.MULTi\-
+
+        Example: /site/TV-HD:\.MULTi\-
+        Result: '$irctrigger' del release TV-HD \.MULTI\-
+
+        When blocking releases that is starting or ending with something
+        then you do this. ^ = Starting - $ = Ending
+
+        Example: '$irctrigger' add release TV-HD ^Start.Test\.
+        Result: /site/TV-HD:^Start.Test\.
+
+        Example: '$irctrigger' add release TV-HD Test.End$
+        Result: /site/TV-HD:Test.End$
+
+        Example: /site/TV-HD:^Start.Test
+        Result: '$irctrigger' del TV-HD ^Start.Test
+
+        Example: /site/TV-HD:Start.End$
+        Result: '$irctrigger' del TV-HD Start.End$
+
+        When blocking/unblocking a group for a specific section you do this.
+
+        Example: '$irctrigger' add release TV-HD \-GROUPNAME$
+        Result: /site/TV-HD:\-GROUPNAME$
+
+        Example: /site/TV-HD:\-GROUPNAME$
+        Result: '$irctrigger' del release TV-HD \-GROUPNAME$
 		
 	---------------------------------------
 										
