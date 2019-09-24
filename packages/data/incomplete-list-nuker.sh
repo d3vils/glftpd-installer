@@ -98,7 +98,7 @@ else
 
 		for secpath in $secpaths
 		do
-		results="`$cleanup $glroot 2>/dev/null | grep -e "^Incomplete" | tr '\"' '\n' | grep -e "$secpath" | tr -s '/' | sort`"
+		results="`$cleanup $glroot 2>/dev/null | grep -e "^Incomplete" | tr '\"' '\n' | grep -e "$secpath" | grep -v "/Subs" | tr -s '/' | sort`"
 
 		if [ -z "$results" ]
 		then
@@ -116,7 +116,7 @@ else
 			comp="`ls -1 $glroot$result/ | grep "$releaseComplete"`"
 			percent="`echo $comp | awk -F " " '{print $3}'` complete"
 
-			if [ $percent != " complete" ]
+			if [ "$percent" != " complete" ]
 			then
 				percent="`echo $comp | awk -F " " '{print $3}'`"
 

@@ -15,6 +15,7 @@
 - Section Manager did not remove section from pre.cfg
 - Changed code for Section Manager so that it better keep the format of zsconfig.h after removal of sections.
 - Section Manager gave out error when removing section from addaffil.sh
+- Removed /Subs from the list of incompletes in incomplete-list-nuker
 
 ### Updated
 
