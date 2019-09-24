@@ -65,9 +65,6 @@ fi
 if [ "$ARGS" = "help" ]
 then
 	echo '
-	
-	########################################
-									
 	This script looks after the first line of sections that       
 	matches when blocking so if you have specified the same       
 	section numerous times to give a better view in shell then    
@@ -81,36 +78,36 @@ then
 		
         It is considered good practice to use \. or \- when blocking
         releases instead of just the word to ensure that block occurs correctly.
-
+		
         Example: '$irctrigger' add release TV-HD \.MULTi\-
         Result: /site/TV-HD:\.MULTi\-
-
+		
         Example: /site/TV-HD:\.MULTi\-
         Result: '$irctrigger' del release TV-HD \.MULTI\-
-
+		
         When blocking releases that is starting or ending with something
         then you do this. ^ = Starting - $ = Ending
-
+		
         Example: '$irctrigger' add release TV-HD ^Start.Test\.
         Result: /site/TV-HD:^Start.Test\.
-
+		
         Example: '$irctrigger' add release TV-HD Test.End$
         Result: /site/TV-HD:Test.End$
-
+		
         Example: /site/TV-HD:^Start.Test
         Result: '$irctrigger' del TV-HD ^Start.Test
-
+		
         Example: /site/TV-HD:Start.End$
         Result: '$irctrigger' del TV-HD Start.End$
-
+		
         When blocking/unblocking a group for a specific section you do this.
-
+		
         Example: '$irctrigger' add release TV-HD \-GROUPNAME$
         Result: /site/TV-HD:\-GROUPNAME$
-
+		
         Example: /site/TV-HD:\-GROUPNAME$
         Result: '$irctrigger' del release TV-HD \-GROUPNAME$
-		
+				
 	---------------------------------------
 										
 	Blocking / Unblocking groups
@@ -124,9 +121,6 @@ then
 										
 	Example: DENYGROUPS="/site:\-GROUPNAME$
 	Result: '$irctrigger' del group GROUPNAME
-										
-	########################################
-	
 	'
 fi
 
