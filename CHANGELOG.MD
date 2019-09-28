@@ -22,6 +22,7 @@
 - Updated README and included Tur-Predircheck Manager in the list of scripts
 - Updated ircnick to only display latest since it's the relevant and changed announce to ops chan instead of nick
 - Updated Tur-Predircheck_Manager so you no longer need to manually escape special chars since it's done automatically
+- Minor adjustment to dated.sh script
 
 
 ## 9.0 - 2019-09-11
