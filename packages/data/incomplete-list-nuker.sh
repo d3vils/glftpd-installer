@@ -126,8 +126,8 @@ else
 
 					if [ "$secname" = "0DAY" ] || [ "$secname" = "MP3" ] || [ "$secname" = "FLAC" ]
 					then
-						release=`echo $secrel | awk -F "/" '{print $3}'`
-						day=`echo $secrel | awk -F "/" '{print $1"/"$2}'`
+						release=`echo $secrel | awk -F "/" '{print $2}'`
+						day=`echo $secrel | awk -F "/" '{print $1}'`
 
 						if [ $(find $glroot/site/$secname/$secrel -maxdepth 0 -type f -iname "Approved_by*" | wc -l) == "0" ]
 						then
