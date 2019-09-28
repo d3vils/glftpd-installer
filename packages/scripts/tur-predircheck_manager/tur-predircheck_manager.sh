@@ -46,6 +46,7 @@ irctrigger="!block"
 #--[ Script start ]---------------------------------------------#
 
 ARGS=`echo "$@" | cut -d ' ' -f2- | sed 's:[]\[\^\$\.\*\/]:\\\\&:g'`
+INPUT=`echo "$@" | cut -d ' ' -f2-`
 if [ "$ARGS" = "" ]
 then
 	echo '
@@ -138,7 +139,8 @@ if [[ "$ARGS" = "add release"* ]]
 then
 	section=`echo $ARGS | awk -F " " '{print $3}'`
 	regexp=`echo $ARGS | awk -F " " '{print $4}'`
-	echo "blocking $regexp in section $section"
+	regexpc=`echo $INPUT | awk -F " " '{print $4}'`
+	echo "Blocking $regexpc in section $section"
 	$glroot/bin/sed -i "0,/\/site\/$section:/s/$section:/$section:$regexp|/" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
 	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
@@ -148,7 +150,8 @@ if [[ "$ARGS" = "add newline release"* ]]
 then
 	section=`echo $ARGS | awk -F " " '{print $4}'`
 	regexp=`echo $ARGS | awk -F " " '{print $5}'`
-	echo "blocking $regexp in section $section on a new line"
+	regexpc=`echo $INPUT | awk -F " " '{print $5}'`
+	echo "Blocking $regexpc in section $section on a new line"
 	$glroot/bin/sed -i "0,/.*\/site\/$section.*/s/.*\/site\/$section.*/\/site\/$section:$regexp|\n&/" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
 	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
@@ -159,7 +162,8 @@ then
 	osection=`echo $ARGS | awk -F " " '{print $3}'`
 	nsection=`echo $ARGS | awk -F " " '{print $4}'`
 	regexp=`echo $ARGS | awk -F " " '{print $5}'`
-	echo "blocking $regexp in new section $nsection"
+	regexpc=`echo $INPUT | awk -F " " '{print $5}'`
+	echo "Blocking $regexpc in new section $nsection"
 	$glroot/bin/sed -i "0,/.*\/site\/$osection.*/s/.*\/site\/$osection.*/\/site\/$nsection:$regexp|\n&/" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$nsection:/ s/\\|$//gI" $predircheck
 	$glroot/bin/sed -i -e "/\/site\/$nsection:/ s/||/|/g" $predircheck
@@ -169,7 +173,8 @@ if [[ "$ARGS" = "del release"* ]]
 then
 	section=`echo $ARGS | awk -F " " '{print $3}'`
 	regexp=`echo $ARGS | awk -F " " '{print $4}'`
-	echo "unblocking $regexp in section $section"
+	regexpc=`echo $INPUT | awk -F " " '{print $4}'`
+	echo "Unblocking $regexpc in section $section"
 	$glroot/bin/sed -i -e "/\/site\/$section:/ s/$regexp//g" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/:\\|/:/gI" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
@@ -179,14 +184,14 @@ fi
 if [[ "$ARGS" = "del section"* ]]
 then
 	section=`echo $ARGS | awk -F " " '{print $3}'`
-	echo "removed all rows containing section: $section"
+	echo "Removed all rows containing section: $section"
 	$glroot/bin/sed -i "/\/site\/$section/d" $predircheck
 fi
 
 if [[ "$ARGS" = "add group"* ]]
 then
 	group=`echo $ARGS | awk -F " " '{print $3}'`
-	echo "blocking group $group"
+	echo "Blocking group $group"
 	$glroot/bin/sed -i "/^DENYGROUPS/ s/\"$/|\\\-$group\\\$\"/" $predircheck
 	$glroot/bin/sed -i -e "/^DENYGROUPS/ s/||/|/g" $predircheck
 	$glroot/bin/sed -i -r -e "/^DENYGROUPS/ s/:\\|/:/gI" $predircheck
@@ -195,7 +200,7 @@ fi
 if [[ "$ARGS" = "del group"* ]]
 then
 	group=`echo $ARGS | awk -F " " '{print $3}'`
-	echo "unblocking group $group"
+	echo "Unblocking group $group"
 	$glroot/bin/sed -i -e "/^DENYGROUPS/ s/\\\\-$group\\\$//gI" $predircheck
 	$glroot/bin/sed -i -r -e "/^DENYGROUPS/ s/\\|\"$/\"/gI" $predircheck
 	$glroot/bin/sed -i -e "/^DENYGROUPS/ s/||/|/g" $predircheck
