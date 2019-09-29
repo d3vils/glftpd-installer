@@ -186,7 +186,7 @@ if [ ! -d "$2/$1" ]; then
       section="`echo "$rawdata" | cut -d ':' -f1`"
       deniedgroup="`echo "$rawdata" | cut -d ':' -f2`"
 
-      if [ "`echo "$2" | egrep -i "$section"`" ]; then
+      if [ "`echo "$2" | egrep -i "$section$"`" ]; then
         if [ "`echo "$1" | egrep -i "$deniedgroup"`" ]; then
           proc_checkallow "$1"
           proc_debug "Stop & Deny: This group is banned."
@@ -203,7 +203,7 @@ if [ ! -d "$2/$1" ]; then
       section="`echo "$rawdata" | cut -d ':' -f1`$"
       denied="`echo "$rawdata" | cut -d ':' -f2`"
 
-      if [ "`echo "$2" | egrep -i "$section"`" ]; then
+      if [ "`echo "$2" | egrep -i "$section$"`" ]; then
         if [ "`echo "$1" | egrep -i "$denied"`" ]; then
           proc_checkallow "$1"
           proc_debug "Stop & Deny: This dir seems denied in DENYDIRS"

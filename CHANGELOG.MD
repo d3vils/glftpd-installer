@@ -17,6 +17,7 @@
 - Section Manager gave out error when removing section from addaffil.sh
 - Removed /Subs from the list of incompletes in incomplete-list-nuker
 - Fixed announce for Tur-predircheck_manager
+- Tur-predircheck did not block when sections were named similar since it grep section names incorrectly
 
 ### Updated
 

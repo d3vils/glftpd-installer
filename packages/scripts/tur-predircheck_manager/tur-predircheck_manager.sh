@@ -131,7 +131,7 @@ then
 fi
 
 if [ "$ARGS" = "list groups" ]
-	then
+then
 	$glroot/bin/sed -n '/DENYGROUPS=\"/,/$/p' $predircheck
 fi
 
