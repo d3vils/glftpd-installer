@@ -66,8 +66,9 @@ function start
 		echo -n "Remove folder $section under $glroot/site ? [Y]es [N]o, default N : " ; read remove
 		case $remove in
 		    [Yy])
-		    echo "$actionname $glroot/site"
+		    echo "Removing $section, please wait..."
 		    rm -rf $glroot/site/$section
+		    echo "$actionname $glroot/site"
 		    ;;
 		    *)
 		    echo "Remember, section folder $section needs to be removed under $glroot/site"

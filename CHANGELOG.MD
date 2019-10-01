@@ -18,6 +18,7 @@
 - Removed /Subs from the list of incompletes in incomplete-list-nuker
 - Fixed announce for Tur-predircheck_manager
 - Tur-predircheck did not block when sections were named similar since it grep section names incorrectly
+- Fix of announce in Section Manager when choosing to remove section folder
 
 ### Updated
 
