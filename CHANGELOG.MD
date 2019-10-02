@@ -29,6 +29,7 @@
 - Updated ircnick to only display latest since it's the relevant and changed announce to ops chan instead of nick
 - Updated Tur-Predircheck_Manager so you no longer need to manually escape special chars since it's done automatically
 - Minor adjustment to dated.sh script
+- Changed slots for default.user from 2 to 6
 
 
 ## 9.0 - 2019-09-11
