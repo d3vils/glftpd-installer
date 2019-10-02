@@ -19,6 +19,9 @@
 - Fixed announce for Tur-predircheck_manager
 - Tur-predircheck did not block when sections were named similar since it grep section names incorrectly
 - Fix of announce in Section Manager when choosing to remove section folder
+- libFLAC was not installed because libcopy.sh was run before the install of pzs-ng, moved it to after install of pzs-ng
+- Fixed spelling error when installing ircnick
+- Emptied the default /ftp-data/misc/welcome.msg since it could cause errors in some ftp clients because of oneliners
 
 ### Updated
 

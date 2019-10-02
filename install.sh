@@ -592,7 +592,7 @@ function glftpd
 	echo "####### Here starts glFTPD scripts #######" >> /var/spool/cron/crontabs/root
 	#cd $PK1DIR ; mv -f ../data/installgl.sh ./ ; ./installgl.sh >/dev/null 2>&1
 	cd $PK1DIR && sed "s/changeme/$port/" ../data/installgl.sh.org > installgl.sh && chmod +x installgl.sh && ./installgl.sh >/dev/null 2>&1
-	$glroot/libcopy.sh >/dev/null 2>&1
+	>$glroot/ftp-data/misc/welcome.msg
 	echo -e "[\e[32mDone\e[0m]"
 	cd ../data
 	echo "##########################################################################" > glftpd.conf
@@ -902,6 +902,7 @@ function pzsng
 	echo -n "Installing PZS-NG, please wait...                               "
 	cd packages/pzs-ng
 	./configure >/dev/null 2>&1 ; make >/dev/null 2>&1 ; make install >/dev/null 2>&1
+	$glroot/libcopy.sh >/dev/null 2>&1
 	echo -e "[\e[32mDone\e[0m]"
 	cp sitebot/ngB* $glroot/sitebot/scripts/pzs-ng/
 	cp -r sitebot/modules $glroot/sitebot/scripts/pzs-ng/
@@ -1577,7 +1578,7 @@ function ircnick
 		echo -n "Installing Ircnick, please wait...                              "
 		cp ircnick/*.sh $glroot/bin
 		cp ircnick/*.tcl $glroot/sitebot/scripts
-		sed -i "s/changeme/$channelops/" $glroot/sitebot/scripts/ircnick.sh
+		sed -i "s/changeme/$channelops/" $glroot/sitebot/scripts/ircnick.tcl
 		echo "source scripts/ircnick.tcl" >> $glroot/sitebot/eggdrop.conf
 		echo -e "[\e[32mDone\e[0m]"
 		;;
