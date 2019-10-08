@@ -286,6 +286,11 @@ function channel
 			echo "idle-kick 0" >> $rootdir/.tmp/eggchan
 			echo "stopnethack-mode 0" >> $rootdir/.tmp/eggchan
 			echo "flood-chan 0:0" >> $rootdir/.tmp/eggchan
+			echo "flood-join 0:0" >> $rootdir/.tmp/eggchan
+			echo "flood-ctcp 0:0" >> $rootdir/.tmp/eggchan
+			echo "flood-kick 0:0" >> $rootdir/.tmp/eggchan
+			echo "flood-deop 0:0" >> $rootdir/.tmp/eggchan
+			echo "flood-nick 0:0" >> $rootdir/.tmp/eggchan
 			echo "aop-delay 0:0" >> $rootdir/.tmp/eggchan
 			echo "chanmode \"+ntsk $chanpassword\"" >> $rootdir/.tmp/eggchan
 			echo "}" >> $rootdir/.tmp/eggchan

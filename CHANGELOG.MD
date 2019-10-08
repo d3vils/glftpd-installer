@@ -30,6 +30,7 @@
 - Updated Tur-Predircheck_Manager so you no longer need to manually escape special chars since it's done automatically
 - Minor adjustment to dated.sh script
 - Changed slots for default.user from 2 to 6
+- Removed remaining flood protections from eggdrop since they shown to cause havoc in chans under unusal circumstances ie netsplits
 
 
 ## 9.0 - 2019-09-11
