@@ -32,7 +32,6 @@ else
 	    *.1080p.*)
 	    section=X264-1080
 	    release="$MOVIE*"
-	    echo $MOVIE
 	    ;;
 	    *)
 	    echo "Please enter full releasename ie Terminator.Salvation.2009.THEATRICAL.1080p.BluRay.x264-FLAME"
