@@ -31,6 +31,8 @@
 - Changed slots for default.user from 2 to 6
 - Removed remaining flood protections from eggdrop since they shown to cause havoc in chans under unusal circumstances ie netsplits
 
+### Added
+- Included mediainfo script but needs to be manually installed
 
 ## 9.0 - 2019-09-11
 
