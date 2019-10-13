@@ -10,7 +10,7 @@ VER=1.0
 #--[ Settings ]-------------------------------------------------#
 
 GLROOT=/glftpd
-TMP=$glroot/tmp
+TMP=$GLROOT/tmp
 INPUT=`echo "$@" | cut -d " " -f2`
 TV=`echo $INPUT | grep -o ".*S[0-9][0-9]E[0-9][0-9]."`
 MOVIE=`echo $INPUT | sed 's/[0-9][0-9][0-9][0-9]p//' | grep -o ".*[0-9][0-9][0-9][0-9]."`
@@ -60,14 +60,14 @@ else
 	    ;;
 	esac
     fi
-    cd /glftpd/bin
-    if [ ! -d $TMP ]; then mkdir -m777 $glroot/tmp ; fi
-    for info in `find $glroot/site/$section -name "$release"`
+    cd $GLROOT/bin
+    if [ ! -d $TMP ]; then mkdir -m777 $GLROOT/tmp ; fi
+    for info in `find $GLROOT/site/$section -name "$release"`
     do
 	for media in `find $info -name "*.rar" -not -path "*/Subs*"`
 	do
 	    ./mediainfo-rar $media > $TMP/mediainfo.txt
-	    release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|$glroot/site/$section/||" -e 's|/.*||' -e 's/ //'`
+	    release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|$GLROOT/site/$section/||" -e 's|/.*||' -e 's/ //'`
 	    echo -n "$release"
 	    filesize=`cat $TMP/mediainfo.txt | grep "File size*" | grep "MiB\|GiB" | cut -d ":" -f2 | sed 's/ //'`
 	    echo -n " | $filesize"
