@@ -62,12 +62,12 @@ else
     fi
     cd /glftpd/bin
     if [ ! -d $TMP ]; then mkdir -m777 $glroot/tmp ; fi
-    for info in `find /glftpd/site/$section -name "$release"`
+    for info in `find $glroot/site/$section -name "$release"`
     do
 	for media in `find $info -name "*.rar" -not -path "*/Subs*"`
 	do
 	    ./mediainfo-rar $media > $TMP/mediainfo.txt
-	    release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|/glftpd/site/$section/||" -e 's|/.*||' -e 's/ //'`
+	    release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|$glroot/site/$section/||" -e 's|/.*||' -e 's/ //'`
 	    echo -n "$release"
 	    filesize=`cat $TMP/mediainfo.txt | grep "File size*" | grep "MiB\|GiB" | cut -d ":" -f2 | sed 's/ //'`
 	    echo -n " | $filesize"
