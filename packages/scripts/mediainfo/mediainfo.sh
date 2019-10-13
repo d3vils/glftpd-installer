@@ -62,7 +62,7 @@ else
 	esac
     fi
     cd /glftpd/bin
-    if [ -z $TMP ]; mkdir -m777 $glroot/tmp
+    if [ ! -d $TMP ]; then mkdir -m777 $glroot/tmp ; fi
     for info in `find /glftpd/site/$section -name "$release"`
     do
 	for media in `find $info -name "*.rar" -not -path "*/Subs"`
