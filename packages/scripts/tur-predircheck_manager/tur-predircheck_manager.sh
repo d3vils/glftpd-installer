@@ -54,6 +54,8 @@ then
 	'$irctrigger' list sections - To list current blocklist for sections
 	'$irctrigger' list groups - To list current blocklist for groups
 	'$irctrigger' add release <sectionname> <regexp> - To block a release in existing section on first line that matches
+        '$irctrigger' edit release <sectionname> startword <regexp> - To edit and add to existing block of words in existing section on first line that matches
+        '$irctrigger' edit release <sectionname> startword - To edit and remove existing block of word in existing section on first line that matches
 	'$irctrigger' add newline release <sectionname> <regexp> - To block a release in an existing section on a new line
 	'$irctrigger' add newsection <oldsectionname> <newsectionname> <regexp> - To block a release in a new section on a new line with existing section as reference point
 	'$irctrigger' del release <sectionname> <regexp> - To unblock a release in specified section
@@ -100,6 +102,23 @@ then
 		
         Example: /site/TV-HD:Start.End$
         Result: '$irctrigger' del TV-HD Start.End$
+
+        When blocking words
+
+        Example: '$irctrigger' add release 0DAY [._-](word)[._-]
+        Result: /site/0DAY:[._-](word)[._-]
+
+        Adding wordblock to existing block
+
+        Example: /site/0DAY:[._-](word)[._-]
+        Do: '$irctrigger' edit release 0DAY word newword
+        Result: /site/0DAY:[._-](newword|word)[._-]
+
+        Removing wordblock from existing block
+
+        Example: /site/0DAY:[._-](newword|word)[._-]
+        Do: '$irctrigger' edit release 0DAY newword
+        Result: /site/0DAY:[._-](word)[._-]
 		
         When blocking/unblocking a group for a specific section you do this.
 		
@@ -167,6 +186,27 @@ then
 	$glroot/bin/sed -i "0,/.*\/site\/$osection.*/s/.*\/site\/$osection.*/\/site\/$nsection:$regexp|\n&/" $predircheck
 	$glroot/bin/sed -i -r -e "/\/site\/$nsection:/ s/\\|$//gI" $predircheck
 	$glroot/bin/sed -i -e "/\/site\/$nsection:/ s/||/|/g" $predircheck
+fi
+
+if [[ "$ARGS" = "edit release"* ]]
+then
+        section=`echo $ARGS | awk -F " " '{print $3}'`
+        startword=`echo $ARGS | awk -F " " '{print $4}'`
+        regexp=`echo $ARGS | awk -F " " '{print $5}'`
+        regexpc=`echo $INPUT | awk -F " " '{print $5}'`
+        if [ ! -z $regexp ]
+        then
+            echo "Adding wordblock $regexpc in section $section"
+            $glroot/bin/sed -i "0,/\/site\/$section:\/*.$startword/s/$startword/$regexp|$startword/" $predircheck
+            $glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
+            $glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+        else
+            echo "Removing wordblock $startword in section $section"
+            $glroot/bin/sed -i "0,/\/site\/$section:\/*.$startword/s/$startword|//" $predircheck
+            $glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
+            $glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+
+        fi
 fi
 
 if [[ "$ARGS" = "del release"* ]]

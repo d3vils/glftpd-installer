@@ -30,6 +30,7 @@
 - Minor adjustment to dated.sh script
 - Changed slots for default.user from 2 to 6
 - Removed remaining flood protections from eggdrop since they shown to cause havoc in chans under unusal circumstances ie netsplits
+- Added the ability to edit existing block of words with tur-predircheck_manager, added help syntax and examples
 
 ### Added
 - Included mediainfo script but needs to be manually installed
