@@ -64,7 +64,7 @@ else
     if [ ! -d $TMP ]; then mkdir -m777 $glroot/tmp ; fi
     for info in `find /glftpd/site/$section -name "$release"`
     do
-	for media in `find $info -name "*.rar" -not -path "*/Subs"`
+	for media in `find $info -name "*.rar" -not -path "*/Subs*"`
 	do
 	    ./mediainfo-rar $media > $TMP/mediainfo.txt
 	    release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|/glftpd/site/$section/||" -e 's|/.*||' -e 's/ //'`
