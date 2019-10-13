@@ -1,5 +1,5 @@
 #									     #
-# Tur-Predircheck_Manager.tcl 1.1 by Teqno                                   #
+# Tur-Predircheck_Manager.tcl 1.2 by Teqno                                   #
 #									     #
 # If tur-predircheck_manager.sh is not located in /glftpd/bin, then          #
 # change the path in 'set binary' below.                                     #
@@ -43,4 +43,4 @@ proc pub:banned {nick output binary chan text} {
 
 }
 
-putlog "Tur-Predircheck_Manager.tcl 1.1 by Teqno loaded"
+putlog "Tur-Predircheck_Manager.tcl 1.2 by Teqno loaded"
