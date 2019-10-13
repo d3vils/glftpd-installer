@@ -19,6 +19,7 @@ git clone https://github.com/teqnodude/glftpd-installer
 *  foo-tools(only foo-pre installed)
 *  idlebotkick
 *  ircnick
+*  mediainfo
 *  precheck
 *  psxc-imdb
 *  section manager
