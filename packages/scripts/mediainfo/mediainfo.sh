@@ -66,28 +66,30 @@ else
     do
 	for media in `find $info -name "*.rar" -not -path "*/Subs*"`
 	do
-	    ./mediainfo-rar $media > $TMP/mediainfo.txt
-	    release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|$GLROOT/site/$section/||" -e 's|/.*||' -e 's/ //'`
-	    echo -n "$release"
-	    filesize=`cat $TMP/mediainfo.txt | grep "File size*" | grep "MiB\|GiB" | cut -d ":" -f2 | sed 's/ //'`
-	    echo -n " | $filesize"
-	    duration=`cat $TMP/mediainfo.txt | grep "^Duration" | head -1 | cut -d ":" -f2 | sed 's/ //'`
-	    echo -n " | $duration"
-	    obitrate=`cat $TMP/mediainfo.txt | grep -v "Overall bit rate mode" | grep "Overall bit rate" | head -1 | cut -d ":" -f2 | sed 's/ //'`
-	    if [ "$obitrate" ]; then echo -n " | Overall: $obitrate" ; fi
-	    vbitrate=`cat $TMP/mediainfo.txt | grep "^Bit rate  " | head -1 | cut -d ":" -f2 | sed 's/ //'`
-	    if [ "$vbitrate" ]; then echo -n " | Video: $vbitrate" ; fi
-	    nbitrate=`cat $TMP/mediainfo.txt | grep "^Nominal bit rate  " | head -2 | tail -1 | cut -d ":" -f2 | sed 's/ //'`
-	    if [ "$nbitrate" ]; then  echo -n " | Video Nominal: $nbitrate" ; fi
-	    abitrate=`cat $TMP/mediainfo.txt | grep "^Bit rate  " | head -2 | tail -1 | cut -d ":" -f2 | sed 's/ //'`
-	    if [ "$abitrate" ]; then echo -n " | Audio: $abitrate" ; fi
-	    format=`cat $TMP/mediainfo.txt | grep "^Format         " | head -3 | tail -1 | cut -d ":" -f2 | sed -e 's/ //' -e 's/UTF\-8//'`
-	    if [ "$format" ]; then echo -n " | $format" ; fi
-	    channels=`cat $TMP/mediainfo.txt | grep "^Channel(s)" | head -1 | cut -d ":" -f2 | sed 's/ //'`
-	    if [ "$channels" ]; then echo -n " $channels" ; fi
-	    language=`cat $TMP/mediainfo.txt | grep "^Language         " | head -1 | cut -d ":" -f2 | sed 's/ //'`
-	    if [ "$language" ]; then echo -n " $language" ; fi
-	    echo
+            ./mediainfo-rar $media > $TMP/mediainfo.txt
+            release=`cat $TMP/mediainfo.txt | grep "^Filename" | cut -d ":" -f2 | sed -e "s|$GLROOT/site/$section/||" -e 's|/.*||' -e 's/ //'`
+            echo -n "$release"
+            filesize=`cat $TMP/mediainfo.txt | grep "File size*" | grep "MiB\|GiB" | cut -d ":" -f2 | sed 's/ //'`
+            echo -n " | $filesize"
+            duration=`cat $TMP/mediainfo.txt | sed -n '/General/,/Video/p' | grep "^Duration" | head -1 | cut -d ":" -f2 | sed 's/ //'`
+            echo -n " | $duration"
+            obitrate=`cat $TMP/mediainfo.txt | sed -n '/General/,/Video/p' | grep -v "Overall bit rate mode" | grep "Overall bit rate" | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$obitrate" ]; then echo -n " | Overall: $obitrate" ; fi
+            vbitrate=`cat $TMP/mediainfo.txt | sed -n '/Video/,/Forced/p' | grep "^Bit rate  " | head -1 | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$vbitrate" ]; then echo -n " | Video: $vbitrate" ; fi
+            nbitrate=`cat $TMP/mediainfo.txt | sed -n '/Video/,/Forced/p' | grep "^Nominal bit rate  " | head -2 | tail -1 | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$nbitrate" ]; then  echo -n " | Video Nominal: $nbitrate" ; fi
+            abitrate=`cat $TMP/mediainfo.txt | sed -n '/Audio #1/,/Forced/p' | grep "^Bit rate  " | head -2 | tail -1 | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$abitrate" ]; then echo -n " | Audio: $abitrate" ; fi
+            mabitrate=`cat $TMP/mediainfo.txt | sed -n '/Audio #1/,/Forced/p' | grep "^Maximum bit rate  " | head -2 | tail -1 | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$mabitrate" ]; then echo -n " | Max Audio: $mabitrate" ; fi
+            format=`cat $TMP/mediainfo.txt | sed -n '/Audio #1/,/Forced/p' | grep "^Format         " | head -3 | tail -1 | cut -d ":" -f2 | sed -e 's/ //' -e 's/UTF\-8//'`
+            if [ "$format" ]; then echo -n " | $format" ; fi
+            channels=`cat $TMP/mediainfo.txt | sed -n '/Audio #1/,/Forced/p' | grep "^Channel(s)" | head -1 | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$channels" ]; then echo -n " $channels" ; fi
+            language=`cat $TMP/mediainfo.txt | sed -n '/Audio #1/,/Forced/p' | grep "^Language         " | head -1 | cut -d ":" -f2 | sed 's/ //'`
+            if [ "$language" ]; then echo -n " $language" ; fi
+            echo
 	done
     done
 fi
