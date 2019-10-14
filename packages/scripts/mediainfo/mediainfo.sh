@@ -62,7 +62,7 @@ else
     fi
     cd $GLROOT/bin
     if [ ! -d $TMP ]; then mkdir -m777 $GLROOT/tmp ; fi
-    for info in `find $GLROOT/site/$section -name "$release"`
+    for info in `find $GLROOT/site/$section -maxdepth 1 -type d -name "$release"`
     do
 	for media in `find $info -name "*.rar" -not -path "*/Subs*"`
 	do
