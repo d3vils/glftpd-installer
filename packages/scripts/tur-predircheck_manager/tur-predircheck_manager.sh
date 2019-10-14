@@ -39,8 +39,8 @@ VER=1.2
 #								#	
 #--[ Settings ]-------------------------------------------------#
 
-glroot="/glftpd"						
-predircheck="$glroot/bin/tur-predircheck.sh"		
+glroot="/glftpd"		
+predircheck="$glroot/bin/tur-predircheck.sh"
 irctrigger="!block"
 
 #--[ Script start ]---------------------------------------------#
@@ -161,8 +161,8 @@ then
 	regexpc=`echo $INPUT | awk -F " " '{print $4}'`
 	echo "Blocking $regexpc in section $section"
 	$glroot/bin/sed -i "0,/\/site\/$section:/s/$section:/$section:$regexp|/" $predircheck
-	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
-	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/|$//gI" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/||/|/gI" $predircheck
 fi
 
 if [[ "$ARGS" = "add newline release"* ]]
@@ -172,8 +172,8 @@ then
 	regexpc=`echo $INPUT | awk -F " " '{print $5}'`
 	echo "Blocking $regexpc in section $section on a new line"
 	$glroot/bin/sed -i "0,/.*\/site\/$section.*/s/.*\/site\/$section.*/\/site\/$section:$regexp|\n&/" $predircheck
-	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
-	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/|$//gI" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/||/|/gI" $predircheck
 fi
 
 if [[ "$ARGS" = "add newsection"* ]]
@@ -184,8 +184,7 @@ then
 	regexpc=`echo $INPUT | awk -F " " '{print $5}'`
 	echo "Blocking $regexpc in new section $nsection"
 	$glroot/bin/sed -i "0,/.*\/site\/$osection.*/s/.*\/site\/$osection.*/\/site\/$nsection:$regexp|\n&/" $predircheck
-	$glroot/bin/sed -i -r -e "/\/site\/$nsection:/ s/\\|$//gI" $predircheck
-	$glroot/bin/sed -i -e "/\/site\/$nsection:/ s/||/|/g" $predircheck
+	$glroot/bin/sed -i "/\/site\/$nsection:/ s/|$//gI" $predircheck
 fi
 
 if [[ "$ARGS" = "edit release"* ]]
@@ -198,13 +197,14 @@ then
         then
             echo "Adding wordblock $regexpc in section $section"
             $glroot/bin/sed -i "0,/\/site\/$section:\/*.$startword/s/$startword/$regexp|$startword/" $predircheck
-            $glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
-            $glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+            $glroot/bin/sed -i "/\/site\/$section:/ s/\\|$//gI" $predircheck
+            $glroot/bin/sed -i "/\/site\/$section:/ s/||/|/gI" $predircheck
         else
             echo "Removing wordblock $startword in section $section"
-            $glroot/bin/sed -i "0,/\/site\/$section:\/*.$startword/s/$startword|//" $predircheck
-            $glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
-            $glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+            $glroot/bin/sed -i "0,/\/site\/$section:\/*.$startword/s/\b$startword\b//" $predircheck
+            $glroot/bin/sed -i "/\/site\/$section:/ s/|)/)/gI" $predircheck
+            $glroot/bin/sed -i "/\/site\/$section:/ s/(|/(/gI" $predircheck
+            $glroot/bin/sed -i "/\/site\/$section:/ s/||/|/gI" $predircheck
 
         fi
 fi
@@ -215,10 +215,10 @@ then
 	regexp=`echo $ARGS | awk -F " " '{print $4}'`
 	regexpc=`echo $INPUT | awk -F " " '{print $4}'`
 	echo "Unblocking $regexpc in section $section"
-	$glroot/bin/sed -i -e "/\/site\/$section:/ s/$regexp//g" $predircheck
-	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/:\\|/:/gI" $predircheck
-	$glroot/bin/sed -i -r -e "/\/site\/$section:/ s/\\|$//gI" $predircheck
-	$glroot/bin/sed -i -e "/\/site\/$section:/ s/||/|/g" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/$regexp//g" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/\/site\/APPS:|/\/site\/$section:/gI" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/|$//gI" $predircheck
+	$glroot/bin/sed -i "/\/site\/$section:/ s/||/|/gI" $predircheck
 fi
 
 if [[ "$ARGS" = "del section"* ]]
@@ -232,19 +232,17 @@ if [[ "$ARGS" = "add group"* ]]
 then
 	group=`echo $ARGS | awk -F " " '{print $3}'`
 	echo "Blocking group $group"
-	$glroot/bin/sed -i "/^DENYGROUPS/ s/\"$/|\\\-$group\\\$\"/" $predircheck
-	$glroot/bin/sed -i -e "/^DENYGROUPS/ s/||/|/g" $predircheck
-	$glroot/bin/sed -i -r -e "/^DENYGROUPS/ s/:\\|/:/gI" $predircheck
+	$glroot/bin/sed -i "/^DENYGROUPS=/ s/\"$/|\\\-$group\\\$\"/" $predircheck
 fi
 
 if [[ "$ARGS" = "del group"* ]]
 then
 	group=`echo $ARGS | awk -F " " '{print $3}'`
 	echo "Unblocking group $group"
-	$glroot/bin/sed -i -e "/^DENYGROUPS/ s/\\\\-$group\\\$//gI" $predircheck
-	$glroot/bin/sed -i -r -e "/^DENYGROUPS/ s/\\|\"$/\"/gI" $predircheck
-	$glroot/bin/sed -i -e "/^DENYGROUPS/ s/||/|/g" $predircheck
-	$glroot/bin/sed -i -r -e "/^DENYGROUPS/ s/:\\|/:/gI" $predircheck
+	$glroot/bin/sed -i "/^DENYGROUPS=/ s/\\\\-$group\\\$//gI" $predircheck
+	$glroot/bin/sed -i "/^DENYGROUPS=/ s/|\"/\"/gI" $predircheck
+	$glroot/bin/sed -i "/^DENYGROUPS=/ s/||/|/gI" $predircheck
+	$glroot/bin/sed -i "/^DENYGROUPS=/ s/\/site:|/\/site:/gI" $predircheck
 fi
 
 exit 0

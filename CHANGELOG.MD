@@ -21,6 +21,7 @@
 - libFLAC was not installed because libcopy.sh was run before the install of pzs-ng, moved it to after install of pzs-ng
 - Fixed spelling error when installing ircnick
 - Emptied the default /ftp-data/misc/welcome.msg since it could cause errors in some ftp clients because of oneliners
+- Optimized code in tur-predircheck_manager and fixed some errors that occured after feature of word block was added to script
 
 ### Updated
 
