@@ -7,7 +7,7 @@
 #                                                               #
 #################################################################
 
-bind pub o !mediainfo pub:mediainfo
+bind pub - !mediainfo pub:mediainfo
 
 ## Public chan.
 proc pub:mediainfo {nick output binary chan text} {
