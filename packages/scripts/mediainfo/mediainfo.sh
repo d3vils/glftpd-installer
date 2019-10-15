@@ -1,5 +1,5 @@
 #!/bin/bash
-VER=1.0
+VER=1.1
 #---------------------------------------------------------------#
 #                                                               #
 # Mediainfo by Teqno                                       	#
@@ -12,10 +12,15 @@ VER=1.0
 GLROOT=/glftpd
 TMP=$GLROOT/tmp
 INPUT=`echo "$@" | cut -d " " -f2`
-TV=`echo $INPUT | grep -o ".*S[0-9][0-9]E[0-9][0-9]."`
+TV=`echo $INPUT | grep -o ".*.S[0-9][0-9]E[0-9][0-9].\|.*.E[0-9][0-9]."`
 MOVIE=`echo $INPUT | sed 's/[0-9][0-9][0-9][0-9]p//' | grep -o ".*[0-9][0-9][0-9][0-9]."`
 
 #--[ Script Start ]----------------------------------------------#
+
+HELP="
+Please enter full releasename ie Terminator.Salvation.2009.THEATRICAL.1080p.BluRay.x264-FLAME\n
+Only works for releases in: TV-720 TV-1080 TV-2160 TV-NO TV-NORDIC X264-1080 X265-2160
+"
 
 if [ -z $INPUT ]
 then
@@ -34,8 +39,7 @@ else
 	    release="$MOVIE*"
 	    ;;
 	    *)
-	    echo "Please enter full releasename ie Terminator.Salvation.2009.THEATRICAL.1080p.BluRay.x264-FLAME"
-	    echo "Only works for releases in: X264-1080 X265-2160 TV-720 TV-1080 TV-2160"
+	    echo -e $HELP
 	    exit 0
 	    ;;
 	esac
@@ -54,8 +58,7 @@ else
 	    release="$TV*720p*"
 	    ;;
 	    *)
-	    echo "Please enter full releasename ie Hard.Sun.S01E06.iNTERNAL.2160p.WEB.h265-BREXiT"
-	    echo "Only works for releases in: X264-1080 X265-2160 TV-720 TV-1080 TV-2160"
+            echo -e $HELP
 	    exit 0
 	    ;;
 	esac
