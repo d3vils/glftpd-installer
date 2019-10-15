@@ -5,7 +5,7 @@ VER=1.1
 # Mediainfo by Teqno                                       	#
 #								#
 # It extracts info from *.rar file for related releases to	#
-# give the user ability to compare quality.			#
+# give the user the ability to compare quality.			#
 #								#
 #--[ Settings ]-------------------------------------------------#
 
@@ -24,8 +24,7 @@ Only works for releases in: TV-720 TV-1080 TV-2160 TV-NO TV-NORDIC X264-1080 X26
 
 if [ -z $INPUT ]
 then
-    echo "Please enter full releasename ie Terminator.Salvation.2009.THEATRICAL.1080p.BluRay.x264-FLAME"
-    echo "Only works for releases in: X264-1080 X265-2160 TV-720 TV-1080 TV-2160"
+    echo -e $HELP
 else
     if [ -z $TV ] 
     then
