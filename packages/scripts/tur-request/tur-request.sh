@@ -731,14 +731,14 @@ proc_checkold() {
           OUTPUT="$STATUSANNOUNCE"
           IRCOUTPUT="TRUE"
           proc_cookies
-          proc_output "$OUTPUT $REAL_POSITION $RELEASE has been deleted because its older then $removedays days."
+          proc_output "$OUTPUT $REAL_POSITION $RELEASE has been deleted because its older than $removedays days."
         fi
         if [ -d "$requests/$requesthead$RELEASE" ]; then
           #rmdir "$requests/$requesthead$RELEASE" >/dev/null 2>&1
           rm -rf "$requests/$requesthead$RELEASE" >/dev/null 2>&1
         fi
 
-        proc_log "REQDELAUTO: \"crontab deleted $RELEASE - Older then $removedays days.\""
+        proc_log "REQDELAUTO: \"crontab deleted $RELEASE - older than $removedays days.\""
         if [ "$REWARD" ]; then
           proc_log "REQDELAUTOREWARD: \"Returned $REWARD MB to $return_username\""
         fi
