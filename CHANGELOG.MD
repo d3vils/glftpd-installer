@@ -24,6 +24,7 @@
 - Optimized code in tur-predircheck_manager and fixed some errors that occured after feature of word block was added to script
 - Fixed mediainfo and limited search and extraction of information to relevant parts of information dump
 - Minor spelling errors
+- Mediainfo didn't display audio at all times and removed some unnecessary code due to previous tweak of limited search
 
 ### Updated
 
