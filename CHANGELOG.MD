@@ -26,6 +26,8 @@
 - Minor spelling errors
 - Mediainfo didn't display audio at all times and removed some unnecessary code due to previous tweak of limited search
 - Optimized Mediainfo and added the removal of tmp file since it could cause permission problems if run in shell and then in irc
+- Fixed so Mediainfo is no longer looking for incomplete or nuked releases
+- Added pattern for checking if release is TV Show or not in Mediainfo
 
 ### Updated
 
