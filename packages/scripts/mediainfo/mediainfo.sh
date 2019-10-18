@@ -82,7 +82,7 @@ else
 
     if [ $(find $GLROOT/site/$section/$release -type f -name "* Complete -*" | wc -l ) != "0" ]
     then
-        echo "Release not found or completed"
+        echo "Release not found or incomplete"
         exit 0
     else
 	cd $GLROOT/bin
