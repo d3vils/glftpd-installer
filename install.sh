@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 VER=9.0
 clear
 
